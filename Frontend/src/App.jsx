@@ -11,12 +11,11 @@ function App() {
     const [pov, setPov] = useState('white');
     const [gameOver, setGameOver] = useState(false);
     const [gameResult, setGameResult] = useState("In progress");
+    const [promotion, setPromotion] = useState(false);
 
     const [grid, setGrid] = useState([]);
 
-    useEffect(() => {
-        console.log('pov changed to'+pov);
-    })
+
 
     useEffect(() => {
         async function start() {
@@ -31,15 +30,14 @@ function App() {
 
     useEffect(() => {
         isGameOver().then(result => {
+            if (result) {
+                getGameResult().then(result => {
+                    setGameResult(result);
+                })
+            }
             setGameOver(result);
         });
-        getGameResult().then(result => {
-            setGameResult(result);
-        })
-
         getBoard(pov).then(board => {
-            console.log('new board update');
-            console.log(board);
             setGrid(board);
         })
 
@@ -57,7 +55,8 @@ function App() {
                        setPossibleMoves={setPossibleMoves}
                        grid={grid}
                        setGrid={setGrid}
-                       pov={pov}></Board>
+                       pov={pov}
+                       setPromotion={setPromotion}></Board>
                 <SideBar turn={turn}
                          setTurn={setTurn}
                          possibleMoves={possibleMoves}
@@ -67,7 +66,9 @@ function App() {
                          setGameOver={setGameOver}
                          grid={grid}
                          setGrid={setGrid}
-                         gameResult={gameResult}/>
+                         gameResult={gameResult}
+                         promotion={promotion}
+                         setPromotion={setPromotion}></SideBar>
 
             </div>
         </div>

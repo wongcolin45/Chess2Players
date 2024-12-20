@@ -11,7 +11,6 @@ function Board(props) {
 
 
     useEffect(() => {
-        console.log('calling is use effect with '+props.pov)
         getBoard(props.pov).then(board => {
             props.setGrid(board);
         })
@@ -33,6 +32,7 @@ function Board(props) {
                                     setTurn={props.setTurn}
                                     possibleMoves={props.possibleMoves}
                                     setPossibleMoves={props.setPossibleMoves}
+                                    setPromotion={props.setPromotion}
                                     pov={props.pov}
                                     key={colIndex}/>
                         )
@@ -80,4 +80,5 @@ Board.propTypes = {
     pov: PropTypes.string.isRequired,
     grid: PropTypes.array.isRequired,
     setGrid: PropTypes.func.isRequired,
+    setPromotion: PropTypes.func.isRequired,
 }

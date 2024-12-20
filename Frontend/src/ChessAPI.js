@@ -173,7 +173,27 @@ async function getGameResult() {
     }
 }
 
+// Piece Promotion
 
+async function promotionAvailable() {
+    try {
+        const url = base + 'promotion';
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        if (!response.ok) {
+            throw new Error(response.statusText);
+        }
+        const data = await response.json();
+        //console.log('promotino avaliable '+data);
+        return data;
+    } catch (e) {
+        return false;
+    }
+}
 
 async function promotePiece(type) {
     try {
@@ -211,4 +231,5 @@ export {
         kingInCheck,
         isGameOver,
         getGameResult,
-        promotePiece};
+        promotePiece,
+        promotionAvailable};

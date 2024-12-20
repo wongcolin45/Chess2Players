@@ -139,7 +139,7 @@ public class GameController {
   }
 
   @CrossOrigin(origins = "http://localhost:5173")
-  @PutMapping("/promotion")
+  @GetMapping("/promotion")
   public ResponseEntity<Boolean> isPromotionAvailable() {
     return ResponseEntity.ok(board.promotionAvailable());
   }

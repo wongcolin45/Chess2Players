@@ -23,10 +23,14 @@ function SideBar(props) {
         await promotePiece(type);
         const nextTurn = await getTurn();
         props.setTurn(nextTurn);
+        props.setPromotion(false);
 
     }
 
     function renderPromotionSelector() {
+        if (!props.promotion) {
+            return <></>
+        }
         const types = ['knight', 'bishop', 'rook', 'queen'];
         let pieces;
         const style = {};
@@ -82,4 +86,6 @@ SideBar.propTypes = {
     setGameOver: PropTypes.func.isRequired,
     grid: PropTypes.array.isRequired,
     setGrid: PropTypes.func.isRequired,
+    promotion: PropTypes.bool.isRequired,
+    setPromotion: PropTypes.func.isRequired,
 }

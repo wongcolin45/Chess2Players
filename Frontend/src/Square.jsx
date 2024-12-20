@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import {getBoard, movePiece, selectPiece, getTurn} from "./ChessAPI.js";
+import {getBoard, movePiece, selectPiece, getTurn, promotionAvailable} from "./ChessAPI.js";
 import Piece from "./Piece.jsx";
 
 
@@ -43,6 +43,9 @@ function Square(props) {
             const nextTurn = await getTurn();
             props.setTurn(nextTurn);
             props.setPossibleMoves([]);
+            // check for promotion
+            const canPromote = await promotionAvailable();
+            props.setPromotion(canPromote);
         } else {
             props.setPossibleMoves([]);
             await handleSelection(notation);
@@ -109,4 +112,5 @@ Square.propTypes = {
     pov: PropTypes.string.isRequired,
     possibleMoves: PropTypes.array.isRequired,
     setPossibleMoves: PropTypes.func.isRequired,
+    setPromotion: PropTypes.func.isRequired,
 }

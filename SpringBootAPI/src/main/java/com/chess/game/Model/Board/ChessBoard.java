@@ -24,13 +24,14 @@ import com.chess.game.View.ChessView;
 public class ChessBoard implements Board {
 
   private final BoardChecker boardChecker;
-
-
   private Position pawnToPromote;
   private final ChessLog log;
   private final Square[][] grid;
   private Color turn;
   private Square selectedSquare;
+
+  private List<Piece> whiteCaptures;
+  private List<Piece> blackCaptures;
 
   public ChessBoard() {
     grid = new Square[8][8];
@@ -44,6 +45,8 @@ public class ChessBoard implements Board {
     turn = Color.WHITE;
     boardChecker = new ChessBoardChecker(this);
     log = new ChessGameLog(this);
+    whiteCaptures = new ArrayList<>();
+    blackCaptures = new ArrayList<>();
   }
 
   @Override
@@ -165,6 +168,11 @@ public class ChessBoard implements Board {
       throw new IllegalArgumentException(pos + " is not a valid move!");
     }
     Piece capture = (isSquareEmpty(pos)) ? null : getPiece(pos);
+    List<Piece> captures = (turn == Color.WHITE) ? whiteCaptures : blackCaptures;
+    if (capture != null) {
+      captures.add(capture);
+    }
+
     Square current = getSquare(pos);
     Piece piece = selectedSquare.getPiece();
     current.setPiece(piece);
@@ -192,6 +200,7 @@ public class ChessBoard implements Board {
           &&
           capture == null) {
         Position piecePos = new Position(start.getRow(), pos.getCol());
+        captures.add(getPiece(piecePos));
         removePiece(piecePos);
       } else if (pos.getRow() == 7 || pos.getRow() == 0) {
         pawnToPromote = pos;
@@ -201,7 +210,6 @@ public class ChessBoard implements Board {
     // add to log
     Move move = new Move(piece, start, pos);
     log.addMove(move);
-
     // recalculate game over
   }
 
@@ -232,7 +240,6 @@ public class ChessBoard implements Board {
 
   @Override
   public boolean isGameOver() {
-
     List<Position> locations = log.getLocations(turn);
     for (Position pos : locations) {
       if (pos != null && !getPossibleMoves(pos).isEmpty()) {
@@ -317,6 +324,8 @@ public class ChessBoard implements Board {
     }
     log = new MockGameLog();
     pawnToPromote = null;
+    whiteCaptures = new ArrayList<>();
+    blackCaptures = new ArrayList<>();
   }
 
   @Override
