@@ -4,7 +4,6 @@ package com.chess.api;
 
 
 import com.chess.game.Model.Board.ChessBoard;
-import com.chess.game.Model.Board.ViewableBoard;
 import com.chess.game.Model.Color;
 import com.chess.game.Model.GameResult;
 import com.chess.game.Model.Pieces.PieceType;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -141,9 +139,19 @@ public class GameController {
   }
 
   @CrossOrigin(origins = "http://localhost:5173")
+  @PutMapping("/promotion")
+  public ResponseEntity<Boolean> isPromotionAvailable() {
+    return ResponseEntity.ok(board.promotionAvailable());
+  }
+
+
+
+  @CrossOrigin(origins = "http://localhost:5173")
   @PutMapping("/promote/{piece}")
   public ResponseEntity<Boolean> promotePawn(@PathVariable String piece) {
-    if (!board.isPawnPromotion()) {
+    if (!board.promotionAvailable()) {
+      ChessView view = new ChessTerminalView(board);
+      view.render();
       return ResponseEntity.status(400).body(false);
     }
     switch (piece.toLowerCase()) {
@@ -155,11 +163,10 @@ public class GameController {
         break;
       case "rook":
         board.promotePawn(PieceType.ROOK);
-      case "queen":
-        board.promotePawn(PieceType.QUEEN);
       default:
-        return ResponseEntity.status(400).body(false);
+        board.promotePawn(PieceType.QUEEN);
     }
+
     return ResponseEntity.ok(true);
   }
 

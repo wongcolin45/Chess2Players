@@ -93,7 +93,7 @@ button:hover {
 }
 
 .flip-board {
-    background-color: lightgrey;
+    background-color: #D9EFFF;
     width: 40vh;
     height: 5vh;
     font-size: 2vh;
@@ -118,7 +118,6 @@ button:hover {
 }
 
 .promotion-selector button {
-    background-color: lightgray;
     margin-right: 1vh;
 }
 

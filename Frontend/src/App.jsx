@@ -14,6 +14,9 @@ function App() {
 
     const [grid, setGrid] = useState([]);
 
+    useEffect(() => {
+        console.log('pov changed to'+pov);
+    })
 
     useEffect(() => {
         async function start() {
@@ -33,6 +36,13 @@ function App() {
         getGameResult().then(result => {
             setGameResult(result);
         })
+
+        getBoard(pov).then(board => {
+            console.log('new board update');
+            console.log(board);
+            setGrid(board);
+        })
+
     },[turn])
 
 
@@ -49,6 +59,7 @@ function App() {
                        setGrid={setGrid}
                        pov={pov}></Board>
                 <SideBar turn={turn}
+                         setTurn={setTurn}
                          possibleMoves={possibleMoves}
                          pov={pov}
                          setPov={setPov}

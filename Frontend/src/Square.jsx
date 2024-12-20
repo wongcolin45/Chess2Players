@@ -1,15 +1,12 @@
-
 import PropTypes from "prop-types";
-import {getBoard, movePiece, selectPiece} from "./ChessAPI.js";
+import {getBoard, movePiece, selectPiece, getTurn} from "./ChessAPI.js";
 import Piece from "./Piece.jsx";
-
 
 
 function Square(props) {
 
 
     const rows = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-
 
     const notation = calculateNotation();
 
@@ -43,13 +40,8 @@ function Square(props) {
             const newBoard = await getBoard(props.pov);
             props.setGrid(newBoard);
             props.setSelection(null);
-
-            props.setTurn(prev => {
-                if (prev === 'white') {
-                    return 'black';
-                }
-                return "white";
-            })
+            const nextTurn = await getTurn();
+            props.setTurn(nextTurn);
             props.setPossibleMoves([]);
         } else {
             props.setPossibleMoves([]);
@@ -90,10 +82,9 @@ function Square(props) {
             style.backgroundRepeat = 'no-repeat';
 
         }
+
         return style;
     }
-
-
 
     return (
         <button key={props.element + props.colIndex}

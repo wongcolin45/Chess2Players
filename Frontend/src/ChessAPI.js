@@ -88,7 +88,10 @@ async function getBoard(color) {
         if (!response.ok) {
             throw new Error(response.statusText);
         }
-        return await response.json();
+        const data = await response.json();
+        // console.log('get board called ');
+        // console.log(data);
+        return data;
     } catch (e) {
         console.error(e);
     }
@@ -125,7 +128,8 @@ async function getTurn() {
         if (!response.ok) {
             throw new Error(response.statusText);
         }
-        return await response.json();
+        const data = await response.text();
+        return data;
     } catch (e) {
         console.error(e);
     }
@@ -169,6 +173,8 @@ async function getGameResult() {
     }
 }
 
+
+
 async function promotePiece(type) {
     try {
         const url = base + 'promote/'+type;
@@ -186,6 +192,7 @@ async function promotePiece(type) {
         return false;
     }
 }
+
 
 
 

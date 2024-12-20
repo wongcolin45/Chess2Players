@@ -1,7 +1,7 @@
 
 import PropTypes from "prop-types";
 import {useEffect, useState} from "react";
-import {getBoard, kingInCheck, promotePiece} from "./ChessAPI.js";
+import {getBoard, getTurn, kingInCheck, promotePiece} from "./ChessAPI.js";
 
 import PieceImage from "./PieceImage.jsx";
 
@@ -19,13 +19,10 @@ function SideBar(props) {
     }
 
 
-
     async function handlePromotionClick(type) {
-        const result = await promotePiece(type);
-        if (result) {
-            const newGrid = await getBoard(props.pov);
-            props.setGrid(newGrid);
-        }
+        await promotePiece(type);
+        const nextTurn = await getTurn();
+        props.setTurn(nextTurn);
 
     }
 
@@ -33,27 +30,31 @@ function SideBar(props) {
         const types = ['knight', 'bishop', 'rook', 'queen'];
         let pieces;
         const style = {};
-        if (props.turn === 'black') {
+        if (props.turn === 'white') {
             pieces = ['♞', '♝', '♜', '♛'];
         } else {
             pieces = ['♘', '♗', '♖', '♕'];
         }
         style.backgroundColor = '#D9EFFF';
-        //const pieces = (props.turn == 'white') ? ['♞', '♝', '♜', '♛'] : ['♘', '♗', '♖', '♕'];
+
         return (
-            <div className={'promotion-selector'}>
-                {
-                    pieces.map((piece, index) => {
-                        return (
-                            <button key={index}
-                                    style={style}
-                                    onClick={() => handlePromotionClick(types[index])}>
-                                <PieceImage key={piece+index} element={piece} stuff={style}/>
-                            </button>
-                        )
-                    })
-                }
-            </div>
+            <>
+                <h2>Promotion Available</h2>
+                <div className={'promotion-selector'}>
+                    {
+
+                        pieces.map((piece, index) => {
+                            return (
+                                <button key={index}
+                                        style={style}
+                                        onClick={() => handlePromotionClick(types[index])}>
+                                    <PieceImage key={piece + index} element={piece} stuff={style}/>
+                                </button>
+                            )
+                        })
+                    }
+                </div>
+            </>
         )
     }
 
@@ -73,6 +74,7 @@ export default SideBar;
 
 SideBar.propTypes = {
     turn: PropTypes.string.isRequired,
+    setTurn: PropTypes.func.isRequired,
     possibleMoves: PropTypes.array.isRequired,
     pov: PropTypes.string.isRequired,
     setPov: PropTypes.func.isRequired,

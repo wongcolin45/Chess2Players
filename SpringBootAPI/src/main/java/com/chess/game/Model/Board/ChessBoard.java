@@ -66,7 +66,7 @@ public class ChessBoard implements Board {
   }
 
   @Override
-  public boolean isPawnPromotion() {
+  public boolean promotionAvailable() {
     return pawnToPromote != null;
   }
 
@@ -197,8 +197,6 @@ public class ChessBoard implements Board {
         pawnToPromote = pos;
         turn = turn.opposing();
       }
-
-
     }
     // add to log
     Move move = new Move(piece, start, pos);

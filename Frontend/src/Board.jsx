@@ -9,8 +9,9 @@ function Board(props) {
     const [selection, setSelection] = useState(null);
 
 
-    // re render when pov changes
+
     useEffect(() => {
+        console.log('calling is use effect with '+props.pov)
         getBoard(props.pov).then(board => {
             props.setGrid(board);
         })
