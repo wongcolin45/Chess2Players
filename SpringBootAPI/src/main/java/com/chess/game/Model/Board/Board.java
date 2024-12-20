@@ -2,6 +2,7 @@ package com.chess.game.Model.Board;
 
 import com.chess.game.Model.Move;
 import com.chess.game.Model.Pieces.Piece;
+import com.chess.game.Model.Pieces.PieceType;
 import com.chess.game.Model.Position;
 
 /**
@@ -65,10 +66,11 @@ public interface Board extends ViewableBoard {
    */
   void undoMove();
 
-
-
+  void promotePawn(PieceType type);
 
   Board getCopy(boolean check);
+
+
 
 
 

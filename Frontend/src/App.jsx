@@ -1,7 +1,7 @@
 import Board from "./Board.jsx";
 import SideBar from "./SideBar.jsx";
 import {useEffect, useState} from "react";
-import {isGameOver, getGameResult} from "./ChessAPI.js";
+import {isGameOver, getGameResult, startGame, getBoard} from "./ChessAPI.js";
 
 
 function App() {
@@ -12,6 +12,18 @@ function App() {
     const [gameOver, setGameOver] = useState(false);
     const [gameResult, setGameResult] = useState("In progress");
 
+    const [grid, setGrid] = useState([]);
+
+
+    useEffect(() => {
+        async function start() {
+            await startGame();
+            const board = await getBoard(pov);
+            setGrid(board);
+        }
+        start();
+
+    },[])
 
 
     useEffect(() => {
@@ -33,13 +45,19 @@ function App() {
                 <Board setTurn={setTurn}
                        possibleMoves={possibleMoves}
                        setPossibleMoves={setPossibleMoves}
+                       grid={grid}
+                       setGrid={setGrid}
                        pov={pov}></Board>
                 <SideBar turn={turn}
                          possibleMoves={possibleMoves}
+                         pov={pov}
                          setPov={setPov}
                          gameOver={gameOver}
                          setGameOver={setGameOver}
+                         grid={grid}
+                         setGrid={setGrid}
                          gameResult={gameResult}/>
+
             </div>
         </div>
     )

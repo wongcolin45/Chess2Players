@@ -71,5 +71,7 @@ public interface ViewableBoard {
 
   Move getLastMove();
 
+  boolean isPawnPromotion();
+
   int movesMade();
 }

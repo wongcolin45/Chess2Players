@@ -25,8 +25,8 @@ public class ChessBoard implements Board {
 
   private final BoardChecker boardChecker;
 
-  private GameResult gameResult;
 
+  private Position pawnToPromote;
   private final ChessLog log;
   private final Square[][] grid;
   private Color turn;
@@ -46,7 +46,6 @@ public class ChessBoard implements Board {
     log = new ChessGameLog(this);
   }
 
-
   @Override
   public void setPieces() {
     setSide(Color.WHITE);
@@ -64,6 +63,27 @@ public class ChessBoard implements Board {
   @Override
   public void undoMove() {
 
+  }
+
+  @Override
+  public boolean isPawnPromotion() {
+    return pawnToPromote != null;
+  }
+
+  @Override
+  public void promotePawn(PieceType type) {
+    if (pawnToPromote == null) {
+      throw new IllegalStateException("There is no pawn to promote!");
+    }
+    if (type == PieceType.PAWN || type == PieceType.KING) {
+      throw new IllegalArgumentException("You cannot promote to a pawn or king!");
+    }
+    Color color = getPiece(pawnToPromote).getColor();
+    Piece newPiece = ChessPieceFactory.buildPiece(color, type);
+    Square square = getSquare(pawnToPromote);
+    square.setPiece(newPiece);
+    turn = turn.opposing();
+    pawnToPromote = null;
   }
 
   private void placePiece(Color color, PieceType type, int r, int c) {
@@ -111,9 +131,11 @@ public class ChessBoard implements Board {
     return this.getSquare(pos).getPiece();
   }
 
-
   @Override
   public void selectedPiece(Position pos) {
+    if (pawnToPromote != null) {
+      throw new IllegalStateException("You need to promote your pawn first");
+    }
     Square current = getSquare(pos);
     if (current.isOccupied() && current.getPiece().getColor() != turn) {
       throw new IllegalArgumentException("You are not allowed to move " + turn.opposing().toString() + "'s pieces!");
@@ -165,20 +187,19 @@ public class ChessBoard implements Board {
       grid[pos.getRow()][pos.getCol()+iter].setPiece(rook);
     }
     // move captured pawn
-    if (piece.getType() == PieceType.PAWN
-        &&
-        pos.getCol() != start.getCol()
-        &&
-        capture == null) {
+    if (piece.getType() == PieceType.PAWN ) {
+      if (pos.getCol() != start.getCol()
+          &&
+          capture == null) {
         Position piecePos = new Position(start.getRow(), pos.getCol());
         removePiece(piecePos);
+      } else if (pos.getRow() == 8 || pos.getRow() == 0) {
+        pawnToPromote = pos;
+        turn = turn.opposing();
+      }
+
+
     }
-    //no comment
-
-
-
-
-
     // add to log
     Move move = new Move(piece, start, pos);
     log.addMove(move);
@@ -224,8 +245,6 @@ public class ChessBoard implements Board {
 
     return true;
   }
-
-
 
   @Override
   public GameResult getGameResult() {
@@ -290,6 +309,7 @@ public class ChessBoard implements Board {
     return copy;
   }
 
+
   private ChessBoard(Square[][] grid, Color turn, boolean check) {
     this.grid = getGridCopy(grid);
     this.turn = turn;
@@ -298,7 +318,8 @@ public class ChessBoard implements Board {
     } else {
       boardChecker = new MockBoardChecker();
     }
-    this.log = new MockGameLog();
+    log = new MockGameLog();
+    pawnToPromote = null;
   }
 
   @Override

@@ -107,7 +107,6 @@ async function kingInCheck(color) {
             throw new Error(response.statusText);
         }
         const data = await response.json();
-        console.log('check returning '+data);
         return data;
     } catch (e) {
         console.error(e);
@@ -164,10 +163,27 @@ async function getGameResult() {
             throw new Error(response.statusText);
         }
         const data = await response.text();
-        console.log("game result "+typeof(data));
         return data;
     } catch (e) {
         console.error(e);
+    }
+}
+
+async function promotePiece(type) {
+    try {
+        const url = base + 'promote/'+type;
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        if (!response.ok) {
+            throw new Error(response.statusText);
+        }
+        return await response.json();
+    } catch (e) {
+        return false;
     }
 }
 
@@ -187,4 +203,5 @@ export {
         getTurn,
         kingInCheck,
         isGameOver,
-        getGameResult};
+        getGameResult,
+        promotePiece};

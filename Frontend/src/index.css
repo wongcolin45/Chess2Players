@@ -108,3 +108,11 @@ button:hover {
     margin-right: 1vh;
 }
 
+
+.promotion-selector button {
+    background-color: lightgray;
+}
+
+.promotion-selector img {
+    width: 5vh;
+}

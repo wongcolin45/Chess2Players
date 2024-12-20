@@ -21,7 +21,6 @@ function Square(props) {
     }
 
     async function handleSelection(notation) {
-        console.log("Handle selection called on "+notation);
         if (props.element === ' ') {
             props.setPossibleMoves([]);
             return;
@@ -44,6 +43,7 @@ function Square(props) {
             const newBoard = await getBoard(props.pov);
             props.setGrid(newBoard);
             props.setSelection(null);
+
             props.setTurn(prev => {
                 if (prev === 'white') {
                     return 'black';

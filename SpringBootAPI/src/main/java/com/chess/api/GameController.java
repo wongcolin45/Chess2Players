@@ -7,6 +7,7 @@ import com.chess.game.Model.Board.ChessBoard;
 import com.chess.game.Model.Board.ViewableBoard;
 import com.chess.game.Model.Color;
 import com.chess.game.Model.GameResult;
+import com.chess.game.Model.Pieces.PieceType;
 import com.chess.game.Model.Position;
 import com.chess.game.View.ChessTerminalView;
 import com.chess.game.View.ChessView;
@@ -114,7 +115,6 @@ public class GameController {
   @CrossOrigin(origins = "http://localhost:5173")
   @GetMapping("/result")
   public ResponseEntity<String> getGameResult() {
-
     if (!board.isGameOver()) {
       return ResponseEntity.ok("In Progress");
     }
@@ -134,6 +134,29 @@ public class GameController {
       case GameResult.STALEMATE_FIFTY_MOVE_RULE -> ResponseEntity.ok("Stalemate by 5 move rule");
       default -> ResponseEntity.ok("In Progress");
     };
+  }
+
+  @CrossOrigin(origins = "http://localhost:5173")
+  @PutMapping("/promote/{piece}")
+  public ResponseEntity<Boolean> promotePawn(@PathVariable String piece) {
+    if (!board.isPawnPromotion()) {
+      return ResponseEntity.status(400).body(false);
+    }
+    switch (piece.toLowerCase()) {
+      case "knight":
+        board.promotePawn(PieceType.KNIGHT);
+        break;
+      case "bishop":
+        board.promotePawn(PieceType.BISHOP);
+        break;
+      case "rook":
+        board.promotePawn(PieceType.ROOK);
+      case "queen":
+        board.promotePawn(PieceType.QUEEN);
+      default:
+        return ResponseEntity.status(400).body(false);
+    }
+    return ResponseEntity.ok(true);
   }
 
 
