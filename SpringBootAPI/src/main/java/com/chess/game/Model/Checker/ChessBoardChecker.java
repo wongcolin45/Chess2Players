@@ -32,6 +32,9 @@ public class ChessBoardChecker implements BoardChecker {
   @Override
   public boolean kingInCheck(Color color) {
     Position kingPos = getKingPosition(color);
+    if (kingPos == null) {
+      return false;
+    }
 
     Piece queen = ChessPieceFactory.buildPiece(color, PieceType.QUEEN);
     Piece knight = ChessPieceFactory.buildPiece(color, PieceType.KNIGHT);
@@ -109,10 +112,12 @@ public class ChessBoardChecker implements BoardChecker {
       return getLegalMoves(start, ends);
     }
 
-
-
     // Piece is pinned:
     Position kingPos = getKingPosition(board.getTurn());
+    if (kingPos == null) {
+      return ends;
+    }
+
     if (kingPos.getRow() == start.getRow()) {
       return ends.stream().filter(end -> end.getRow() == kingPos.getRow()).toList();
     } else if (kingPos.getCol() == start.getCol()) {
@@ -140,7 +145,6 @@ public class ChessBoardChecker implements BoardChecker {
 
   // Get moves that don't allow king to be captured
   private List<Position> getLegalMoves(Position start, List<Position> ends) {
-    Piece p = board.getPiece(start);
     List<Position> moves = new ArrayList<>();
     for (Position end : ends) {
       Board copy = board.getCopy(false);
@@ -205,7 +209,8 @@ public class ChessBoardChecker implements BoardChecker {
         }
       }
     }
-    throw new IllegalStateException("Cannot find the "+color.toString() + " king bro!");
+    return null;
+    //throw new IllegalStateException("Cannot find the "+color.toString() + " king bro!\n"+board.getTextGrid());
   }
 
 

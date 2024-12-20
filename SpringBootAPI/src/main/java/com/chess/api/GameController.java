@@ -29,6 +29,10 @@ import java.util.List;
 public class GameController {
   private ChessBoard board;
 
+  public GameController() {
+    board = new ChessBoard();
+  }
+
   @CrossOrigin(origins = "http://localhost:5173")
   @GetMapping("/")
   public String testAPI() {

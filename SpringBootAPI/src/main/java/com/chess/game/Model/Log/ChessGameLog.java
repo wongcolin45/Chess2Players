@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This keep track of moves made.
@@ -20,8 +21,8 @@ public class ChessGameLog implements ChessLog {
   private Stack<Move> moves;
   private final Board board;
 
-  private final HashMap<Piece, Position> whiteLocations;
-  private final HashMap<Piece, Position> blackLocations;
+  private final ConcurrentHashMap<Piece, Position> whiteLocations;
+  private final ConcurrentHashMap<Piece, Position> blackLocations;
 
   public ChessGameLog(Board board) {
     if (board == null) {
@@ -29,8 +30,8 @@ public class ChessGameLog implements ChessLog {
     }
     moves = new Stack<>();
     this.board = board;
-    whiteLocations = new HashMap<>();
-    blackLocations = new HashMap<>();
+    whiteLocations = new ConcurrentHashMap<>();
+    blackLocations = new ConcurrentHashMap<>();
     setPieceLocations();
   }
 
@@ -58,7 +59,7 @@ public class ChessGameLog implements ChessLog {
   public void addMove(Move move) {
     moves.push(move);
     Color color = move.getPiece().getColor();
-    HashMap<Piece, Position> locations = (color == Color.WHITE) ? whiteLocations : blackLocations;
+    ConcurrentHashMap<Piece, Position> locations = (color == Color.WHITE) ? whiteLocations : blackLocations;
     for (Map.Entry<Piece, Position> entry : locations.entrySet()) {
       Position pos = entry.getValue();
       if (move.getStart().equals(pos)) {
@@ -91,7 +92,7 @@ public class ChessGameLog implements ChessLog {
   @Override
   public List<Position> getLocations(Color color) {
     setPieceLocations();
-    HashMap<Piece, Position> map = (color == Color.WHITE) ? whiteLocations : blackLocations;
+    ConcurrentHashMap<Piece, Position> map = (color == Color.WHITE) ? whiteLocations : blackLocations;
     List<Position> positions = new ArrayList<>();
     for (Position pos : map.values()) {
       positions.add(pos);

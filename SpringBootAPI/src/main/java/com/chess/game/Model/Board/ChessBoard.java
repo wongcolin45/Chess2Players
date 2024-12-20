@@ -193,7 +193,7 @@ public class ChessBoard implements Board {
           capture == null) {
         Position piecePos = new Position(start.getRow(), pos.getCol());
         removePiece(piecePos);
-      } else if (pos.getRow() == 8 || pos.getRow() == 0) {
+      } else if (pos.getRow() == 7 || pos.getRow() == 0) {
         pawnToPromote = pos;
         turn = turn.opposing();
       }
@@ -212,7 +212,6 @@ public class ChessBoard implements Board {
     selectedPiece(new Position(start));
     movePiece(new Position(end));
   }
-
 
   @Override
   public void removePiece(Position pos) {

@@ -4,7 +4,10 @@ import com.chess.game.Model.Board.Board;
 import com.chess.game.Model.Board.ChessBoard;
 import com.chess.game.Model.Color;
 import com.chess.game.Model.GameResult;
+import com.chess.game.Model.Pieces.ChessPieceFactory;
 import com.chess.game.Model.Pieces.King;
+import com.chess.game.Model.Pieces.Piece;
+import com.chess.game.Model.Pieces.PieceType;
 import com.chess.game.Model.Position;
 import com.chess.game.View.ChessTerminalView;
 import com.chess.game.View.ChessView;
@@ -18,12 +21,9 @@ import java.util.List;
 public class ChessBoardTest {
   private Board board;
 
-
-
-  @Before
-  public void init() {
-    board = new ChessBoard();
-    board.setPieces();
+  private void movePiece(Board board, String a, String b) {
+    board.selectedPiece(new Position(a));
+    board.movePiece(new Position(b));
   }
 
   private void printTextGrid(String[][] grid) {
@@ -35,14 +35,16 @@ public class ChessBoardTest {
     }
   }
 
+
+  @Before
+  public void init() {
+    board = new ChessBoard();
+    board.setPieces();
+  }
+
   @Test
   public void testGetTextGrid() {
     printTextGrid(board.getTextGrid(Color.WHITE));
-  }
-
-  private void movePiece(Board board, String a, String b) {
-    board.selectedPiece(new Position(a));
-    board.movePiece(new Position(b));
   }
 
   @Test
@@ -93,5 +95,23 @@ public class ChessBoardTest {
     Assert.assertTrue(moves.contains(new Position("e7")));
     Assert.assertTrue(moves.contains(new Position("f7")));
     Assert.assertFalse(board.isGameOver());
+  }
+
+  @Test
+  public void testBlackPawnPromotion() {
+    ChessView view = new ChessTerminalView(board);
+    board.move("e2", "e4");
+    board.move("d7", "d5");
+    board.move("f2", "f3");
+    board.move("d5", "e4");
+    board.move("h2", "h3");
+    board.move("e4", "f3");
+    board.move("h3", "h4");
+    board.move("f3", "g2");
+    board.move("h4","h5");
+    board.move("g2", "h1");
+    Assert.assertTrue(board.isPawnPromotion());
+    view.render();
+
   }
 }

@@ -35,10 +35,8 @@ function SideBar(props) {
         const style = {};
         if (props.turn === 'black') {
             pieces = ['♞', '♝', '♜', '♛'];
-            style.backgroundColor = 'black';
         } else {
             pieces = ['♘', '♗', '♖', '♕'];
-            style.backgroundColor = 'white';
         }
         style.backgroundColor = '#D9EFFF';
         //const pieces = (props.turn == 'white') ? ['♞', '♝', '♜', '♛'] : ['♘', '♗', '♖', '♕'];

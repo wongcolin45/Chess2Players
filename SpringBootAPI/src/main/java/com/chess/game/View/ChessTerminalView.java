@@ -71,9 +71,7 @@ public class ChessTerminalView implements ChessView {
       result.append(reverseRanks);
     }
     result.append("\n");
-    if (board.kingInCheck(board.getTurn())) {
-      result.append("-------------- Your King is in check! ---------------");
-    }
+    // Stack Overflow error
     return result.toString();
   }
 
