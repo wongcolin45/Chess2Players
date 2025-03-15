@@ -31,13 +31,13 @@ public class GameController {
     board = new ChessBoard();
   }
 
-  @CrossOrigin(origins = "http://localhost:5173")
+  @CrossOrigin(origins = {"http://localhost:5173","https://chess2players.vercel.app"})
   @GetMapping("/")
   public String testAPI() {
     return "server running";
   }
 
-  @CrossOrigin(origins = "http://localhost:5173")
+  @CrossOrigin(origins = {"http://localhost:5173","https://chess2players.vercel.app"})
   @PostMapping("/start")
   public ResponseEntity<String[][]> startGame() {
 //    if (board != null) {
@@ -49,7 +49,7 @@ public class GameController {
     return ResponseEntity.ok(board.getTextGrid(turn));
   }
 
-  @CrossOrigin(origins = "http://localhost:5173")
+  @CrossOrigin(origins = {"http://localhost:5173","https://chess2players.vercel.app"})
   @PutMapping("/select/{notation}")
   public ResponseEntity<List<String>> selectedPiece(@PathVariable String notation) {
     try {
@@ -67,7 +67,7 @@ public class GameController {
   }
 
 
-  @CrossOrigin(origins = "http://localhost:5173")
+  @CrossOrigin(origins = {"http://localhost:5173","https://chess2players.vercel.app"})
   @PutMapping("/move/{notation}")
   public ResponseEntity<String[][]> movePiece(@PathVariable String notation) {
     try {
@@ -82,7 +82,7 @@ public class GameController {
   }
 
 
-  @CrossOrigin(origins = "http://localhost:5173")
+  @CrossOrigin(origins = {"http://localhost:5173","https://chess2players.vercel.app"})
   @GetMapping("/board/{player}")
   public ResponseEntity<String[][]> getBoard(@PathVariable String player) {
     if (board == null) {
@@ -92,20 +92,20 @@ public class GameController {
     return ResponseEntity.ok(board.getTextGrid(color));
   }
 
-  @CrossOrigin(origins = "http://localhost:5173")
+  @CrossOrigin(origins = {"http://localhost:5173","https://chess2players.vercel.app"})
   @GetMapping("/king/{color}")
   public ResponseEntity<Boolean> getCheck(@PathVariable String color) {
     Color player = (color.equalsIgnoreCase("white")) ? Color.WHITE : Color.BLACK;
     return ResponseEntity.ok(board.kingInCheck(player));
   }
 
-  @CrossOrigin(origins = "http://localhost:5173")
+  @CrossOrigin(origins = {"http://localhost:5173","https://chess2players.vercel.app"})
   @GetMapping("/turn")
   public ResponseEntity<String> getTurn() {
     return ResponseEntity.ok(board.getTurn().toString());
   }
 
-  @CrossOrigin(origins = "http://localhost:5173")
+  @CrossOrigin(origins = {"http://localhost:5173","https://chess2players.vercel.app"})
   @GetMapping("/gameOver")
   public ResponseEntity<Boolean> isGameOver() {
     if (board == null) {
@@ -114,7 +114,7 @@ public class GameController {
     return ResponseEntity.ok(board.isGameOver());
   }
 
-  @CrossOrigin(origins = "http://localhost:5173")
+  @CrossOrigin(origins = {"http://localhost:5173","https://chess2players.vercel.app"})
   @GetMapping("/result")
   public ResponseEntity<String> getGameResult() {
     if (!board.isGameOver()) {
@@ -138,7 +138,7 @@ public class GameController {
     };
   }
 
-  @CrossOrigin(origins = "http://localhost:5173")
+  @CrossOrigin(origins = {"http://localhost:5173","https://chess2players.vercel.app"})
   @GetMapping("/promotion")
   public ResponseEntity<Boolean> isPromotionAvailable() {
     return ResponseEntity.ok(board.promotionAvailable());
@@ -146,7 +146,7 @@ public class GameController {
 
 
 
-  @CrossOrigin(origins = "http://localhost:5173")
+  @CrossOrigin(origins = {"http://localhost:5173","https://chess2players.vercel.app"})
   @PutMapping("/promote/{piece}")
   public ResponseEntity<Boolean> promotePawn(@PathVariable String piece) {
     if (!board.promotionAvailable()) {

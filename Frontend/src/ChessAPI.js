@@ -1,6 +1,6 @@
 
 //const base = 'http://localhost:8080/';
-const base = 'https://chess-zuhx.onrender.com/';
+const base = 'https://chessapi-ecqj.onrender.com/';
 
 const board = [
     [" ", " ", " ", " ", " ", " ", " ", " "],
