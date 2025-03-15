@@ -28,7 +28,7 @@ async function startGame() {
         return await response.json();
     } catch (e) {
         console.error(e);
-        return board;
+        //return board;
     }
 }
 
@@ -48,7 +48,7 @@ async function selectPiece(notation) {
         return data;
         // eslint-disable-next-line no-unused-vars
     } catch (e) {
-        return []
+        //return []
     }
 }
 
@@ -107,7 +107,7 @@ async function getBoard(color) {
         return data;
     } catch (e) {
         console.error(e);
-        return board;
+        //return board;
     }
 }
 
