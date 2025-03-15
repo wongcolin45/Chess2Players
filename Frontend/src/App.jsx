@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {isGameOver, getGameResult, startGame, getBoard} from "./ChessAPI.js";
 
 
+
 function App() {
 
     const [turn, setTurn] = useState('white');
@@ -12,6 +13,9 @@ function App() {
     const [gameOver, setGameOver] = useState(false);
     const [gameResult, setGameResult] = useState("In progress");
     const [promotion, setPromotion] = useState(false);
+
+    // is game started:
+    const [gameStarted, setGameStarted] = useState(false);
 
     const [grid, setGrid] = useState([]);
 
@@ -24,7 +28,7 @@ function App() {
             setGrid(board);
         }
         start();
-
+        setGameStarted(true);
     },[])
 
 

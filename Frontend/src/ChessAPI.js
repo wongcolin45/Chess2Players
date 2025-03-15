@@ -1,6 +1,17 @@
 
 const base = 'http://localhost:8080/';
 
+const board = [
+    [" ", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " ", " "]
+];
+
 async function startGame() {
     try {
         const url = base + 'start';
@@ -16,6 +27,7 @@ async function startGame() {
         return await response.json();
     } catch (e) {
         console.error(e);
+        return board;
     }
 }
 
@@ -94,6 +106,7 @@ async function getBoard(color) {
         return data;
     } catch (e) {
         console.error(e);
+        return board;
     }
 }
 

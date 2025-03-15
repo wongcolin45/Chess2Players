@@ -52,7 +52,6 @@ function Board(props) {
                         return renderRow(row, rowIndex);
                     })
                 }
-
             </>
         )
     }
