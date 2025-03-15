@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin(origins = {"http://localhost:5173","https://chess2players.vercel.app"})
 @RestController
 public class GameController {
   private ChessBoard board;
