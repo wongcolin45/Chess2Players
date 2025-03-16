@@ -12,9 +12,9 @@ public class WebConfig implements WebMvcConfigurer {
   @Override
   public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/**")  // Allow all endpoints
-            .allowedOrigins("http://localhost:5173", "https://chess2players.vercel.app", "https://chess-client-98ij.onrender.com")
-            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")  // Allow specific methods
+            .allowedOrigins("*")  // Allow all origins
+            .allowedMethods("*")  // Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
             .allowedHeaders("*")  // Allow all headers
-            .allowCredentials(true);  // Allow credentials (if needed)
+            .allowCredentials(false);  // Credentials won't work with "*"
   }
 }

@@ -1,6 +1,6 @@
 
-//const base = 'http://localhost:8080/';
-const base = 'https://chessapi-97v8.onrender.com/';
+const base = 'http://localhost:8080/';
+//const base = 'https://chessapi-97v8.onrender.com/';
 
 const board = [
     [" ", " ", " ", " ", " ", " ", " ", " "],
@@ -21,7 +21,6 @@ async function startGame() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include'
         });
         if (!response.ok) {
            throw new Error(response.statusText);
@@ -41,7 +40,6 @@ async function selectPiece(notation) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include'
         });
         if (!response.ok) {
             throw new Error(response.statusText);
@@ -81,7 +79,7 @@ async function movePiece(notation) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include'
+
         });
         if (!response.ok) {
             throw new Error(response.statusText);
@@ -100,7 +98,7 @@ async function getBoard(color) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include'
+
         });
         if (!response.ok) {
             throw new Error(response.statusText);
@@ -123,7 +121,7 @@ async function kingInCheck(color) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include'
+
         });
         if (!response.ok) {
             throw new Error(response.statusText);
@@ -143,7 +141,7 @@ async function getTurn() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include'
+
         });
         if (!response.ok) {
             throw new Error(response.statusText);
@@ -163,7 +161,7 @@ async function isGameOver() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include'
+
         });
         if (!response.ok) {
             throw new Error(response.statusText);
@@ -183,7 +181,7 @@ async function getGameResult() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include'
+
         });
         if (!response.ok) {
             throw new Error(response.statusText);
@@ -205,7 +203,7 @@ async function promotionAvailable() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include'
+
         });
         if (!response.ok) {
             throw new Error(response.statusText);
@@ -226,7 +224,7 @@ async function promotePiece(type) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include'
+
         });
         if (!response.ok) {
             throw new Error(response.statusText);
