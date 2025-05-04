@@ -1,8 +1,6 @@
 package com.chess.api;
 
 
-
-
 import com.chess.game.Model.Board.ChessBoard;
 import com.chess.game.Model.Color;
 import com.chess.game.Model.GameResult;
@@ -25,6 +23,7 @@ import java.util.List;
 
 
 @RestController
+@CrossOrigin(origins = "*")  // Allow all origins
 public class GameController {
   private ChessBoard board;
 
@@ -67,8 +66,6 @@ public class GameController {
     }
   }
 
-
-
   @PutMapping("/move/{notation}")
   public ResponseEntity<String[][]> movePiece(@PathVariable String notation) {
     try {
@@ -81,7 +78,6 @@ public class GameController {
     }
 
   }
-
 
 
   @GetMapping("/board/{player}")
@@ -99,7 +95,6 @@ public class GameController {
     Color player = (color.equalsIgnoreCase("white")) ? Color.WHITE : Color.BLACK;
     return ResponseEntity.ok(board.kingInCheck(player));
   }
-
 
   @GetMapping("/turn")
   public ResponseEntity<String> getTurn() {
@@ -144,9 +139,6 @@ public class GameController {
   public ResponseEntity<Boolean> isPromotionAvailable() {
     return ResponseEntity.ok(board.promotionAvailable());
   }
-
-
-
 
   @PutMapping("/promote/{piece}")
   public ResponseEntity<Boolean> promotePawn(@PathVariable String piece) {
