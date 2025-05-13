@@ -1,77 +1,43 @@
 package com.chess.game.Model.Board;
 
-import java.util.List;
-
 import com.chess.game.Model.Color;
-import com.chess.game.Model.GameResult;
-import com.chess.game.Model.Move;
+import com.chess.game.Model.Pieces.Piece;
 import com.chess.game.Model.Position;
 
-public interface ViewableBoard {
-
-
-  /**
-   * Gets the current turn of the player.
-   * @return the color turn
-   */
-  Color getTurn();
+public interface ViewableChessBoard {
 
   /**
-   * Checks is position is empty;
+   * Checks if a square is empty.
    * @param pos the position to check
    * @return true if empty, otherwise false
    */
-  boolean isEmpty(Position pos);
+  public boolean isEmpty(Position pos);
+
+  /**
+   * Gets the piece at the given position.
+   * @param pos the position of the piece
+   * @return the piece
+   * @throws IllegalArgumentException if there is no piece at the position
+   */
+  public Piece getPiece(Position pos);
 
 
   /**
-   * Check if the king is in check.
-   * @param color the color of the king
-   * @return true if the king is in check, otherwise false
+   * Gets the text grid representation of the board.
+   * @return the string 2d array representation
    */
-  boolean kingInCheck(Color color);
-
+  public String[][] getTextGrid();
 
   /**
-   * Gets all the possible moves for the selected piece at that position.
-   * If no piece is selected an empty list is given.
+   * Gets the text grid representation of the board.
+   * @param color the color pov of the board
+   * @return the string 2d representation
    */
-  List<Position> getPossibleMoves();
+  public String[][] getTextGrid(Color color);
 
   /**
-   * Gets the String grid of the board.
-   * @return the grid
+   * Get a deep copy of the board.
+   * @return the board
    */
-  String[][] getTextGrid();
-
-  String[][] getTextGrid(Color color);
-
-
-  boolean isGameOver();
-
-  /**
-   * Gets the results of the game.
-   * @return the result, either checkmate for white/black or stalemate
-   * @throws IllegalStateException if the game is not over
-   */
-  GameResult getGameResult();
-
-
-  /**
-   * Checks if the piece is pinned.
-   * @return true if the piece is pinned
-   */
-  boolean isPiecePinned();
-
-  boolean isSquareEmpty(Position pos);
-
-  boolean squareNotMoved(Position pos);
-
-  boolean squareNotMoved(int r, int c);
-
-  Move getLastMove();
-
-  boolean promotionAvailable();
-
-  int movesMade();
+  public ChessBoard getCopy();
 }
