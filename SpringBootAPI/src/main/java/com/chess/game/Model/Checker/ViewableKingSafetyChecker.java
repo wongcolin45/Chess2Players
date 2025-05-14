@@ -3,10 +3,9 @@ package com.chess.game.Model.Checker;
 import java.util.List;
 
 import com.chess.game.Model.Color;
-import com.chess.game.Model.GameResult;
 import com.chess.game.Model.Position;
 
-public interface BoardChecker {
+public interface ViewableKingSafetyChecker {
 
   boolean kingInCheck(Color color);
 

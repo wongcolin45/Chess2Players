@@ -7,7 +7,7 @@ import com.chess.game.Model.Position;
 import java.util.List;
 import java.util.Stack;
 
-public interface ViewableChessGameLog {
+public interface ViewableGameLog {
 
   Move getLastMove();
 
@@ -25,5 +25,5 @@ public interface ViewableChessGameLog {
 
   int getMoveCount();
 
-  ChessGameGameGameLog getCopy();
+  GameLog getCopy();
 }

@@ -3,7 +3,7 @@ package com.chess.game.Model;
 /**
  * This represents the result of a chess game.
  */
-public enum GameResult {
+public enum GameStatus {
   WHITE_CHECKMATE,
   BLACK_CHECKMATE,
   STALEMATE_THREEFOLD_REPETITION,

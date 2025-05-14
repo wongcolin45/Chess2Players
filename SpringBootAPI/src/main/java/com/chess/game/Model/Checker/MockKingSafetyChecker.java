@@ -5,7 +5,7 @@ import com.chess.game.Model.Position;
 
 import java.util.List;
 
-public class MockViewableKingSafetyChecker implements ViewableKingSafetyChecker {
+public class MockKingSafetyChecker implements ViewableKingSafetyChecker {
   @Override
   public boolean kingInCheck(Color color) {
     return false;

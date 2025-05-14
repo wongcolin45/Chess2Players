@@ -3,7 +3,7 @@ package com.chess.game.Model.Board;
 import com.chess.game.Model.Pieces.Piece;
 import com.chess.game.Model.Position;
 
-public interface MutableChessBoard extends ViewableChessBoard {
+public interface MutableBoard extends ViewableBoard {
 
   /**
    * Sets the pieces on the board.

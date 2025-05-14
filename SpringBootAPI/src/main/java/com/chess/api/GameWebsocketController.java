@@ -2,41 +2,58 @@ package com.chess.api;
 
 
 import com.chess.api.dto.MoveDTO;
+import com.chess.api.dto.PieceSelectionDTO;
 import com.chess.api.dto.PositionDTO;
 import com.chess.api.dto.PossibleMovesDTO;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class ChessWebsocketController {
+public class GameWebsocketController {
 
   private final SimpMessagingTemplate messagingTemplate;
-  private final GameSession gameService;
 
-  public ChessWebsocketController(SimpMessagingTemplate messagingTemplate) {
+  private final GameSessionManager manager;
+
+  @Autowired
+  public GameWebsocketController(SimpMessagingTemplate messagingTemplate, GameSessionManager manager) {
     this.messagingTemplate = messagingTemplate;
-    gameService = new GameSession();
+    this.manager = manager;
   }
 
-  @MessageMapping("move-piece")
-  public void movePiece(MoveDTO moveDTO) {
-    gameService.movePiece(moveDTO);
-    messagingTemplate.convertAndSend("/topic/gameState", gameService.getGameStateDTO());
+  @MessageMapping("move-piece/{gameId}/{roleId}")
+  public void movePiece(@DestinationVariable String gameId, @DestinationVariable String roleId, MoveDTO moveDTO) {
+    GameSession session = manager.getGameSession(gameId);
+    session.movePiece(moveDTO, roleId);
+    messagingTemplate.convertAndSend("/topic/gameState/"+gameId, session.getGameStateDTO());
   }
 
-  @MessageMapping("possible-moves")
-  @SendTo("/topic/possible-moves")
-  public PossibleMovesDTO getPossibleMoves(PositionDTO positionDTO) {
-    return gameService.getPossibleMoves(positionDTO);
+  @MessageMapping("possible-moves/{gameId}")
+  public void getPossibleMoves(@DestinationVariable String gameId, PositionDTO positionDTO) {
+    GameSession session = manager.getGameSession(gameId);
+    messagingTemplate.convertAndSend("/topic/possible-moves/"+gameId, session.getPossibleMoves(positionDTO));
+
   }
 
+  @MessageMapping("promote-pawn/{gameId}")
+  public void promotePawn(@DestinationVariable String gameId, PieceSelectionDTO pieceSelectionDTO) {
+    GameSession session = manager.getGameSession(gameId);
+    if (!session.canPromotePawn()) {
+      throw new IllegalStateException("Can't promote pawn");
+    }
+    session.promotePawn(pieceSelectionDTO.getPiece());
+    messagingTemplate.convertAndSend("/topic/gameState/"+gameId, session.getGameStateDTO());
+  }
 
-  @MessageMapping("request-state")
-  public void sendFullState() {
-    messagingTemplate.convertAndSend("/topic/gameState", gameService.getGameStateDTO());
+  @MessageMapping("request-state/{gameId}")
+  public void sendFullState(@DestinationVariable String gameId) {
+    GameSession session = manager.getGameSession(gameId);
+    messagingTemplate.convertAndSend("/topic/gameState/"+gameId, session.getGameStateDTO());
   }
 
 

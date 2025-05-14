@@ -1,11 +1,11 @@
 package com.chess.game.Model.Pieces;
 
-import com.chess.game.Model.Board.Board;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import com.chess.game.Model.Board.ViewableBoard;
 import com.chess.game.Model.Color;
+import com.chess.game.Model.Game.ViewableGame;
 import com.chess.game.Model.Position;
 
 public abstract class AbstractStraightPiece extends AbstractPiece {
@@ -20,7 +20,8 @@ public abstract class AbstractStraightPiece extends AbstractPiece {
   }
 
   @Override
-  public List<Position> getMoves(Board board, Position pos) {
+  public List<Position> getMoves(ViewableGame game, Position pos) {
+    ViewableBoard board = game.getViewableBoard();
     List<Position> moves = new ArrayList<>();
     int i = 0;
     int r = pos.getRow();

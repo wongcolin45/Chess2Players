@@ -7,11 +7,11 @@ import java.util.Map;
 import java.util.UUID;
 
 @Component
-public class ChessService {
+public class GameSessionManager {
 
-  private Map<String, GameSession> sessions;
+  private final Map<String, GameSession> sessions;
 
-  public ChessService() {
+  public GameSessionManager() {
     this.sessions = new HashMap<>();
   }
 
@@ -23,7 +23,7 @@ public class ChessService {
 
   public GameSession getGameSession(String gameId) {
     if (!sessions.containsKey(gameId)) {
-      throw new IllegalArgumentException("Invalid gameId: " + gameId);
+      throw new IllegalArgumentException("Invalid gameId: " + gameId + " does not exist.");
     }
     return sessions.get(gameId);
   }

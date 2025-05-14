@@ -1,16 +1,16 @@
 package com.chess.game.Model.Game;
 
-import com.chess.game.Model.Board.ChessBoard;
-import com.chess.game.Model.Board.MutableChessBoard;
+import com.chess.game.Model.Board.Board;
+import com.chess.game.Model.Board.MutableBoard;
 import com.chess.game.Model.Board.Square;
-import com.chess.game.Model.Board.ViewableChessBoard;
+import com.chess.game.Model.Board.ViewableBoard;
 import com.chess.game.Model.Checker.ViewableKingSafetyChecker;
 import com.chess.game.Model.Checker.KingSafetyChecker;
 import com.chess.game.Model.Color;
 import com.chess.game.Model.GameStatus;
-import com.chess.game.Model.Log.ChessGameGameGameLog;
-import com.chess.game.Model.Log.MutableChessGameGameLog;
-import com.chess.game.Model.Log.ViewableChessGameLog;
+import com.chess.game.Model.Log.GameLog;
+import com.chess.game.Model.Log.MutableGameLog;
+import com.chess.game.Model.Log.ViewableGameLog;
 import com.chess.game.Model.Move;
 import com.chess.game.Model.Pieces.ChessPieceFactory;
 import com.chess.game.Model.Pieces.Piece;
@@ -22,10 +22,10 @@ import com.chess.game.View.ChessView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChessGame implements SandboxChessGame {
+public class ChessGame implements SandboxGame {
 
-  private final MutableChessBoard board;
-  private final MutableChessGameGameLog log;
+  private final MutableBoard board;
+  private final MutableGameLog log;
 
   private final ViewableKingSafetyChecker checker;
 
@@ -33,10 +33,11 @@ public class ChessGame implements SandboxChessGame {
   private Color turn;
 
 
+
   public ChessGame() {
-    board = new ChessBoard();
+    board = new Board();
     board.setPieces();
-    log = new ChessGameGameGameLog();
+    log = new GameLog();
     checker = new KingSafetyChecker(this);
     log.setPieceLocations(board);
     turn = Color.WHITE;
@@ -45,6 +46,11 @@ public class ChessGame implements SandboxChessGame {
   @Override
   public boolean kingInCheck(Color color) {
     return checker.kingInCheck(color);
+  }
+
+  @Override
+  public boolean canPromotePawn() {
+    return pawnToPromote != null;
   }
 
   @Override
@@ -94,8 +100,9 @@ public class ChessGame implements SandboxChessGame {
     if (!selectedSquare.isOccupied()) {
       throw new IllegalArgumentException("There is no piece here to move");
     }
-    if (selectedSquare.getPiece().getColor() != turn) {
-      throw new IllegalArgumentException("It is "+turn+"'s turn you cannot move opposing pieces");
+    Piece selectedPiece = selectedSquare.getPiece();
+    if (selectedPiece.getColor() != turn) {
+      throw new IllegalArgumentException("It is "+turn+"'s turn you cannot move the piece on "+startPos);
     }
     if (!getPossibleMoves(startPos).contains(pos)) {
       throw new IllegalArgumentException(pos + " is not a valid move!");
@@ -151,6 +158,15 @@ public class ChessGame implements SandboxChessGame {
     log.addMove(move);
   }
 
+  @Override
+  public void promotePawn(PieceType pieceType) {
+    Piece piece = ChessPieceFactory.buildPiece(turn, pieceType);
+    Square selectedSquare = board.getSquare(pawnToPromote);
+    selectedSquare.clear();
+    selectedSquare.setPiece(piece);
+    pawnToPromote = null;
+    turn = turn.opposing();
+  }
 
 
   @Override
@@ -159,26 +175,27 @@ public class ChessGame implements SandboxChessGame {
   }
 
   @Override
-  public ViewableChessGameLog getLog() {
+  public ViewableGameLog getLog() {
     return log;
   }
 
 
   @Override
-  public ViewableChessBoard getViewableBoard() {
+  public ViewableBoard getViewableBoard() {
     return board;
   }
 
-  private ChessGame(MutableChessBoard board, MutableChessGameGameLog log) {
+  private ChessGame(MutableBoard board, MutableGameLog log, Color turn) {
     this.board = board.getCopy();
     this.log = log.getCopy();
     this.checker = new KingSafetyChecker(this);
+    this.turn = turn;
   }
 
 
   @Override
-  public SandboxChessGame getCopy() {
-    return new ChessGame(board, log);
+  public SandboxGame getCopy() {
+    return new ChessGame(board, log, turn);
   }
 
   @Override
@@ -186,12 +203,12 @@ public class ChessGame implements SandboxChessGame {
     Square startSquare = board.getSquare(start);
     Square endSquare = board.getSquare(end);
     if (!startSquare.isOccupied()) {
-      endSquare.clear();
-      return;
+      throw new IllegalArgumentException("There is no piece here to move");
     }
     Piece piece = startSquare.getPiece();
     endSquare.clear();
     endSquare.setPiece(piece);
+    startSquare.clear();
 
   }
 

@@ -1,4 +1,5 @@
 package com.chess.api;
 
-public class PlayerRole {
+public enum PlayerRole {
+  WHITE, BLACK, SPECTATOR
 }

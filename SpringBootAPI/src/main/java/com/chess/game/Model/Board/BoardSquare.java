@@ -31,6 +31,9 @@ public class BoardSquare implements Square {
 
   @Override
   public void setPiece(Piece piece) {
+    if (piece == null) {
+      throw new IllegalArgumentException("Piece cannot be null");
+    }
     this.piece = piece;
     occupied = true;
   }

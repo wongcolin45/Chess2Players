@@ -1,5 +1,6 @@
 package com.chess.game.Model.Game;
 
+import com.chess.game.Model.Board.MutableBoard;
 import com.chess.game.Model.Pieces.Piece;
 import com.chess.game.Model.Position;
 
@@ -7,7 +8,7 @@ import com.chess.game.Model.Position;
 /**
  * Interface for a Chess Game where rules can be broken.
  */
-public interface SandboxChessGame extends MutableChessGame {
+public interface SandboxGame extends MutableGame {
 
   /**
    * Make this move with no regard for rules.
@@ -33,4 +34,6 @@ public interface SandboxChessGame extends MutableChessGame {
    * Clear the chess board of all pieces.
    */
   void clearBoard();
+
+
 }

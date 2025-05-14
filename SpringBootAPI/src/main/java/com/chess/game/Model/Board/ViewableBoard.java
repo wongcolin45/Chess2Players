@@ -4,7 +4,7 @@ import com.chess.game.Model.Color;
 import com.chess.game.Model.Pieces.Piece;
 import com.chess.game.Model.Position;
 
-public interface ViewableChessBoard {
+public interface ViewableBoard {
 
   /**
    * Checks if a square is empty.
@@ -39,5 +39,5 @@ public interface ViewableChessBoard {
    * Get a deep copy of the board.
    * @return the board
    */
-  public ChessBoard getCopy();
+  public Board getCopy();
 }

@@ -1,9 +1,9 @@
 package com.chess.api.dto;
 
-public class ChessBoard {
+public class BoardDTO {
   private final String[][] board;
 
-  public ChessBoard(String[][] board) {
+  public BoardDTO(String[][] board) {
     this.board = board;
   }
 

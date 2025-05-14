@@ -1,14 +1,13 @@
 package com.chess.game.Model.Pieces;
 
-import com.chess.game.Model.Board.Board;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import com.chess.game.Model.Board.ViewableBoard;
 import com.chess.game.Model.Color;
+import com.chess.game.Model.Game.ViewableGame;
+import com.chess.game.Model.Log.ViewableGameLog;
 import com.chess.game.Model.Position;
-import com.chess.game.View.ChessTerminalView;
-import com.chess.game.View.ChessView;
 
 public class King extends AbstractPiece {
 
@@ -20,25 +19,27 @@ public class King extends AbstractPiece {
   }
 
 
-  private void addCastleMoves(Board board, List<Position> moves, Position pos) {
-    if (board.squareNotMoved(pos)) {
+  private void addCastleMoves(ViewableGame game, List<Position> moves, Position pos) {
+    ViewableBoard board = game.getViewableBoard();
+    ViewableGameLog log = game.getLog();
+    if (!log.squareMoved(pos)) {
       int row = (color == Color.WHITE) ? 7 : 0;
       Position rook1 = new Position(row, 0);
       String r = (color == Color.BLACK) ? "8" : "1";
 
-      if (board.squareNotMoved(rook1) && !board.isSquareEmpty(rook1)) {
+      if (!log.squareMoved(rook1) && !board.isEmpty(rook1)) {
         Position a = new Position("f"+r);
         Position b = new Position("g"+r);
-        if (board.isSquareEmpty(a) && board.isSquareEmpty(b)) {
+        if (board.isEmpty(a) && board.isEmpty(b)) {
           moves.add(new Position("g"+r));
         }
       }
       Position rook2 = new Position(row, 7);
-      if (board.squareNotMoved(rook2) && !board.isSquareEmpty(rook2)) {
+      if (!log.squareMoved(rook2) && !board.isEmpty(rook2)) {
         Position a = new Position("d"+r);
         Position b = new Position("c"+r);
         Position c = new Position("b"+r);
-        if (board.isSquareEmpty(a) && board.isSquareEmpty(b) && board.isSquareEmpty(c)) {
+        if (board.isEmpty(a) && board.isEmpty(b) && board.isEmpty(c)) {
           moves.add(new Position("c"+r));
         }
 
@@ -50,7 +51,8 @@ public class King extends AbstractPiece {
 
 
   @Override
-  public List<Position> getMoves(Board board, Position pos) {
+  public List<Position> getMoves(ViewableGame game, Position pos) {
+    ViewableBoard board = game.getViewableBoard();
     List<Position> moves = new ArrayList<>();
 
     for (int i = 0; i < 8; i++) {
@@ -59,7 +61,7 @@ public class King extends AbstractPiece {
 
     // check if king has moved
     if (pos.getRow() == 7 || pos.getRow() == 0) {
-      addCastleMoves(board, moves, pos);
+      addCastleMoves(game, moves, pos);
     }
 
 

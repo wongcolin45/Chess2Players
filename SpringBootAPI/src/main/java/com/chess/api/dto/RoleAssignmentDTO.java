@@ -1,25 +1,22 @@
 package com.chess.api.dto;
 
 import com.chess.api.PlayerRole;
-import com.chess.game.Model.Color;
 
-import java.util.UUID;
+public class RoleAssignmentDTO {
 
-public class PlayerAssignmentDTO {
+  private final String roleId;
+  private final PlayerRole role;
 
-  private final String playerId;
-  private final PlayerRole playerRole;
-
-  public PlayerAssignmentDTO(String playerId, PlayerRole playerRole) {
-    this.playerId = playerId;
-    this.playerRole = playerRole;
+  public RoleAssignmentDTO(String roleId, PlayerRole role) {
+    this.roleId = roleId;
+    this.role = role;
   }
 
-  public String getPlayerId() {
-    return playerId;
+  public String getRoleId() {
+    return roleId;
   }
 
-  public PlayerRole getPlayerRole() {
-    return playerRole;
+  public PlayerRole getRole() {
+    return role;
   }
 }

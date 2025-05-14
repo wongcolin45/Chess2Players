@@ -1,4 +1,4 @@
-package com.chess.test.Model.Pieces;
+package com.chess.test.Model;
 
 import com.chess.game.Model.Game.ChessGame;
 import com.chess.game.Model.Position;
@@ -9,9 +9,9 @@ import org.junit.Assert;
 
 import java.util.List;
 
-public class AbstractPieceTest {
+public class AbstractTest {
 
-  protected ChessGame chessGame;
+  protected ChessGame game;
   protected ChessView view;
 
   protected Position a1, a2, a3, a4, a5, a6, a7, a8;
@@ -23,9 +23,9 @@ public class AbstractPieceTest {
   protected Position g1, g2, g3, g4, g5, g6, g7, g8;
   protected Position h1, h2, h3, h4, h5, h6, h7, h8;
 
-  protected AbstractPieceTest() {
-    chessGame = new ChessGame();
-    view = new ChessTerminalView(chessGame);
+  protected AbstractTest() {
+    game = new ChessGame();
+    view = new ChessTerminalView(game);
 
     a1 = new Position("a1"); a2 = new Position("a2"); a3 = new Position("a3"); a4 = new Position("a4");
     a5 = new Position("a5"); a6 = new Position("a6"); a7 = new Position("a7"); a8 = new Position("a8");

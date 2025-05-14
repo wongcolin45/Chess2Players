@@ -2,6 +2,7 @@ package com.chess.api;
 
 import com.chess.api.dto.GameStateDTO;
 import com.chess.api.dto.MoveDTO;
+import com.chess.api.dto.RoleAssignmentDTO;
 import com.chess.api.dto.PositionDTO;
 import com.chess.api.dto.PossibleMovesDTO;
 import com.chess.game.Model.Board.ViewableBoard;
@@ -10,24 +11,57 @@ import com.chess.game.Model.Game.ChessGame;
 import com.chess.game.Model.GameStatus;
 import com.chess.game.Model.Log.ViewableGameLog;
 import com.chess.game.Model.Move;
+import com.chess.game.Model.Pieces.Piece;
 import com.chess.game.Model.Pieces.PieceType;
 import com.chess.game.Model.Position;
+import com.chess.game.View.ChessTerminalView;
+import com.chess.game.View.ChessView;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Simple Chess service for playing a single game
  */
-public class ChessGameService {
+public class GameSession {
 
   private final ChessGame chessGame;
 
-  public ChessGameService() {
+  private String whitePlayer;
+  private String blackPlayer;
+
+  public GameSession() {
     chessGame = new ChessGame();
   }
 
-  public void movePiece(MoveDTO moveDTO) {
+  public RoleAssignmentDTO assignRole() {
+    if (whitePlayer == null) {
+      whitePlayer = String.valueOf(UUID.randomUUID().hashCode());
+      return new RoleAssignmentDTO(whitePlayer, PlayerRole.WHITE);
+    }
+    if (blackPlayer == null) {
+      blackPlayer = String.valueOf(UUID.randomUUID().hashCode());
+      return new RoleAssignmentDTO(blackPlayer, PlayerRole.BLACK);
+    }
+    return new RoleAssignmentDTO("2930", PlayerRole.SPECTATOR);
+  }
+
+  public void movePiece(MoveDTO moveDTO, String roleId) {
+    if (whitePlayer == null || blackPlayer == null) {
+      throw new IllegalStateException("Player not assigned");
+    }
+    if (!roleId.equals(whitePlayer) && !roleId.equals(blackPlayer)) {
+      throw new IllegalArgumentException("Invalid role");
+    }
     Position from = getPosition(moveDTO.getFrom());
+    ViewableBoard board = chessGame.getViewableBoard();
+    Piece piece = board.getPiece(from);
+    if (roleId.equals(whitePlayer) && piece.getColor() == Color.BLACK) {
+      throw new IllegalArgumentException("White piece cannot move black pieces");
+    }
+    if (roleId.equals(blackPlayer) && piece.getColor() == Color.WHITE) {
+      throw new IllegalArgumentException("Black piece cannot move white pieces");
+    }
     Position to = getPosition(moveDTO.getTo());
     chessGame.movePiece(from, to);
   }
@@ -142,11 +176,26 @@ public class ChessGameService {
 
   public PossibleMovesDTO getPossibleMoves(PositionDTO positionDTO) {
     Position pos = getPosition(positionDTO);
-    return new PossibleMovesDTO(chessGame.getPossibleMoves(pos));
+    List<Position> possibleMoves = chessGame.getPossibleMoves(pos);
+    return new PossibleMovesDTO(possibleMoves);
   }
 
   private Position getPosition(PositionDTO posDTO) {
     return new Position(posDTO.getRow(), posDTO.getCol());
+  }
+
+  public boolean canPromotePawn() {
+    return chessGame.canPromotePawn();
+  }
+
+  public void promotePawn(PieceType pieceType) {
+    chessGame.promotePawn(pieceType);
+  }
+
+  @Override
+  public String toString() {
+    ChessView view = new ChessTerminalView(chessGame);
+    return view.toString();
   }
 
 }

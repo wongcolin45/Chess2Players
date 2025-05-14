@@ -1,6 +1,6 @@
 package com.chess.game.Model.Log;
 
-import com.chess.game.Model.Board.ViewableChessBoard;
+import com.chess.game.Model.Board.ViewableBoard;
 import com.chess.game.Model.Color;
 import com.chess.game.Model.Move;
 import com.chess.game.Model.Pieces.Piece;
@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * This keeps track of moves made.
  */
-public class ChessGameGameGameLog implements MutableChessGameGameLog {
+public class GameLog implements MutableGameLog {
   private final Stack<Move> moves;
 
   private int fullMoveNumber;
@@ -25,7 +25,7 @@ public class ChessGameGameGameLog implements MutableChessGameGameLog {
   private final ConcurrentHashMap<Piece, Position> whiteLocations;
   private final ConcurrentHashMap<Piece, Position> blackLocations;
 
-  public ChessGameGameGameLog() {
+  public GameLog() {
     moves = new Stack<>();
     whiteLocations = new ConcurrentHashMap<>();
     blackLocations = new ConcurrentHashMap<>();
@@ -35,7 +35,7 @@ public class ChessGameGameGameLog implements MutableChessGameGameLog {
 
 
   @Override
-  public void setPieceLocations(ViewableChessBoard board) {
+  public void setPieceLocations(ViewableBoard board) {
     if (board == null) {
       throw new IllegalArgumentException("board cannot be null");
     }
@@ -130,7 +130,7 @@ public class ChessGameGameGameLog implements MutableChessGameGameLog {
   }
 
 
-  private ChessGameGameGameLog(Stack<Move> moves) {
+  private GameLog(Stack<Move> moves) {
     this();
     for (Move move : moves) {
       addMove(move);
@@ -138,8 +138,8 @@ public class ChessGameGameGameLog implements MutableChessGameGameLog {
   }
 
   @Override
-  public ChessGameGameGameLog getCopy() {
-    return new ChessGameGameGameLog(getMoves());
+  public GameLog getCopy() {
+    return new GameLog(getMoves());
   }
 
 

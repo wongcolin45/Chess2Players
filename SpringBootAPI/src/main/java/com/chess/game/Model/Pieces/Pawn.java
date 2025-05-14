@@ -1,11 +1,12 @@
 package com.chess.game.Model.Pieces;
 
-import com.chess.game.Model.Board.Board;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import com.chess.game.Model.Board.ViewableBoard;
 import com.chess.game.Model.Color;
+import com.chess.game.Model.Game.ViewableGame;
+import com.chess.game.Model.Log.ViewableGameLog;
 import com.chess.game.Model.Move;
 import com.chess.game.Model.Position;
 
@@ -34,18 +35,14 @@ public class Pawn extends AbstractPiece {
 
   }
 
-  protected void checkOpenMove(Board board, List<Position> moves, int r, int c) {
+  protected void checkOpenMove(ViewableBoard board, List<Position> moves, int r, int c) {
     Position check = new Position(r, c);
     if (onBoard(r,c) && board.isEmpty(check)) {
       moves.add(check);
     }
   }
 
-  private void checkEnPassant(Board board, List<Position> moves, int r, int c) {
-    if (board.movesMade() == 0) {
-      return;
-    }
-    Move move = board.getLastMove();
+  private void checkEnPassant(ViewableBoard board, Move move, List<Position> moves, int r, int c) {
     Position start = move.getStart();
     Position end = move.getEnd();
     boolean doubleMove = Math.abs(start.getRow() - end.getRow()) == 2;
@@ -53,13 +50,13 @@ public class Pawn extends AbstractPiece {
     boolean isRightPiece = piece.getType() == PieceType.PAWN && piece.getColor() == color.opposing();
     boolean nextTo = end.getRow() == (r - forward) && end.getCol() == c;
     Position check = new Position(r, c);
-    if (doubleMove && isRightPiece && nextTo && board.isSquareEmpty(new Position(r, c))) {
+    if (doubleMove && isRightPiece && nextTo && board.isEmpty(new Position(r, c))) {
       moves.add(check);
     }
   }
 
 
-  protected void checkCapture(Board board, List<Position> moves, int r, int c) {
+  protected void checkCapture(ViewableBoard board, List<Position> moves, int r, int c) {
     Position check = new Position(r, c);
     // check for previous moves for en passant
 
@@ -70,12 +67,13 @@ public class Pawn extends AbstractPiece {
   }
 
   @Override
-  public List<Position> getMoves(Board board, Position pos) {
+  public List<Position> getMoves(ViewableGame game, Position pos) {
     List<Position> moves = new ArrayList<>();
 
     int r = pos.getRow();
     int c = pos.getCol();
 
+    ViewableBoard board = game.getViewableBoard();
 
     // Check first move
     if ((color == Color.WHITE && r == 6) || (color == Color.BLACK && r == 1)) {
@@ -86,7 +84,10 @@ public class Pawn extends AbstractPiece {
     // Check diagonal captures
     for (int i = -1; i <= 1; i+= 2) {
       checkCapture(board, moves, r + forward, c + i);
-      checkEnPassant(board, moves, r + forward, c+ i);
+      ViewableGameLog log = game.getLog();
+      if (log.getMoveCount() > 0) {
+        checkEnPassant(board, log.getLastMove(), moves, r + forward, c + i);
+      }
     }
     return moves;
   }

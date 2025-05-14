@@ -28,7 +28,7 @@ public interface Square {
 
   /**
    * This set the piece on this square.
-   * @param piece the put on this square
+   * @param piece the place on this square
    */
   void setPiece(Piece piece);
 

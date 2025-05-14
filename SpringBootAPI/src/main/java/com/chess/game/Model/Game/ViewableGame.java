@@ -1,18 +1,21 @@
 package com.chess.game.Model.Game;
 
-import com.chess.game.Model.Board.ViewableChessBoard;
+import com.chess.game.Model.Board.ViewableBoard;
 import com.chess.game.Model.Color;
 import com.chess.game.Model.GameStatus;
-import com.chess.game.Model.Log.ViewableChessGameLog;
+import com.chess.game.Model.Log.ViewableGameLog;
 import com.chess.game.Model.Position;
 
 import java.util.List;
 
 
-public interface ViewableChessGame {
+public interface ViewableGame {
 
 
   boolean kingInCheck(Color color);
+
+  boolean canPromotePawn();
+
 
   /**
    * Get the turn.
@@ -44,20 +47,20 @@ public interface ViewableChessGame {
    * Get the chess log object
    * @return the log
    */
-  ViewableChessGameLog getLog();
+  ViewableGameLog getLog();
 
   /**
    * Get a viewable board.
    * @return the viewable chess board
    */
-  ViewableChessBoard getViewableBoard();
+  ViewableBoard getViewableBoard();
 
 
   /**
    * Gets a mutable copy of the game.
    * @return the mutable chess game
    */
-  SandboxChessGame getCopy();
+  SandboxGame getCopy();
 
 
 }

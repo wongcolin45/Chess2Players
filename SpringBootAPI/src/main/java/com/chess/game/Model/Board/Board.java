@@ -9,10 +9,10 @@ import com.chess.game.Model.Position;
 /**
  * New implementation of a ChessBoard, simply represent the board state.
  */
-public class ChessBoard implements MutableChessBoard {
+public class Board implements MutableBoard {
   private final Square[][] grid;
 
-  public ChessBoard() {
+  public Board() {
     grid = new Square[8][8];
     for (int r = 0; r < 8; r++) {
       for (int c = 0; c < 8; c++) {
@@ -105,13 +105,13 @@ public class ChessBoard implements MutableChessBoard {
   }
 
 
-  private ChessBoard(Square[][] grid) {
+  private Board(Square[][] grid) {
     this.grid = getGridCopy(grid);
   }
 
   @Override
-  public ChessBoard getCopy() {
-    return new ChessBoard(grid);
+  public Board getCopy() {
+    return new Board(grid);
   }
 
   @Override
