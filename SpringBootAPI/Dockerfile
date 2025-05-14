@@ -1,23 +1,17 @@
-# Use a lightweight JDK image
-# FROM eclipse-temurin:17-jdk-alpine
-#FROM openjdk:17
-FROM openjdk:21
+# Use official JDK image
+FROM eclipse-temurin:21-jdk
 
-
-# Set working directory
+# Set working directory inside container
 WORKDIR /app
 
-# Copy the built JAR file from the target directory to the container
-# COPY target/*.jar app.jar
-COPY target/demo-0.0.1-SNAPSHOT.jar app.jar
+# Copy the JAR file built by Maven (adjust the name if needed)
+COPY target/*.jar app.jar
 
-
-# Expose the default Spring Boot port (optional but useful)
+# Expose port Spring Boot runs on
 EXPOSE 8080
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
-#ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
-
+#docker run -p 8080:8080 chess-backend

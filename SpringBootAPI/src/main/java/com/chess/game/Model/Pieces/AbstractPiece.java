@@ -1,10 +1,10 @@
 package com.chess.game.Model.Pieces;
 
-import com.chess.game.Model.Board.Board;
-
 import java.util.List;
 
+import com.chess.game.Model.Board.ViewableBoard;
 import com.chess.game.Model.Color;
+import com.chess.game.Model.Game.ViewableGame;
 import com.chess.game.Model.Position;
 
 public abstract class AbstractPiece implements Piece {
@@ -22,7 +22,7 @@ public abstract class AbstractPiece implements Piece {
     return 0 <= r && r <= 7 && 0 <= c && c <= 7;
   }
 
-  protected void checkValidMove(Board board, List<Position> moves, Position pos, int r, int c) {
+  protected void checkValidMove(ViewableBoard board, List<Position> moves, Position pos, int r, int c) {
     if (!onBoard(r, c)) {
       return;
     }
@@ -36,7 +36,7 @@ public abstract class AbstractPiece implements Piece {
   }
 
   @Override
-  public abstract List<Position> getMoves(Board board, Position pos);
+  public abstract List<Position> getMoves(ViewableGame game, Position pos);
 
   @Override
   public Color getColor() {

@@ -1,15 +1,12 @@
 package com.chess.game.View;
 
 import com.chess.game.Model.Board.ViewableBoard;
-
-import java.util.List;
-
 import com.chess.game.Model.Color;
-import com.chess.game.Model.Position;
+import com.chess.game.Model.Game.ViewableGame;
 
 public class ChessTerminalView implements ChessView {
 
-  private final ViewableBoard board;
+  private final ViewableGame game;
 
   private int iter;
 
@@ -18,34 +15,23 @@ public class ChessTerminalView implements ChessView {
   private final String ranks = "a     b     c     d     e     f     g     h";
   private final String reverseRanks = "h     g     f     e     d     c     b     a";
 
-  public ChessTerminalView(ViewableBoard board) {
-    this.board = board;
+  public ChessTerminalView(ViewableGame game) {
+    this.game = game;
     this.iter = 1;
     this.start = 0;
   }
 
-  private void addPossibleMoves(String[][] grid) {
-    try {
-      List<Position> moves = board.getPossibleMoves();
-      for (Position p : moves) {
-        grid[p.getRow()][p.getCol()] = "◦";
-      }
-    } catch (Exception ignored) {
 
-    }
-  }
 
   @Override
   public void render() {
-    Color turn = board.getTurn();
-
-    System.out.println(this.toString());
+    System.out.println(this);
   }
 
   @Override
   public String toString() {
+    ViewableBoard board = game.getViewableBoard();
     String[][] grid = board.getTextGrid();
-    addPossibleMoves(grid);
     StringBuilder result = new StringBuilder();
     int file = 8 - start;
 
@@ -65,7 +51,7 @@ public class ChessTerminalView implements ChessView {
     result.append("\n");
 
     result.append("      ");
-    if (board.getTurn() == Color.WHITE) {
+    if (game.getTurn() == Color.WHITE) {
       result.append(ranks);
     } else {
       result.append(reverseRanks);

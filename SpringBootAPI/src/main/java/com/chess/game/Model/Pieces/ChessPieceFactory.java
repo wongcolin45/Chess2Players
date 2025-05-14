@@ -4,8 +4,10 @@ import com.chess.game.Model.Color;
 
 public class ChessPieceFactory {
 
-    private static final String[] blackSymbols = {"♙", "♘", "♗", "♖", "♕", "♔"};
-    private static final String[] whiteSymbols = {"♟", "♞", "♝", "♜", "♛", "♚"};
+//    private static final String[] blackSymbols = {"♙", "♘", "♗", "♖", "♕", "♔"};
+//    private static final String[] whiteSymbols = {"♟", "♞", "♝", "♜", "♛", "♚"};
+  private static final String[] blackSymbols = {"p", "n", "b", "r", "q", "k"};
+  private static final String[] whiteSymbols = {"P", "N", "B", "R", "Q", "K"};
 
     private static String getSymbol(Color color, int i) {
       return (color == Color.WHITE) ? whiteSymbols[i] : blackSymbols[i];

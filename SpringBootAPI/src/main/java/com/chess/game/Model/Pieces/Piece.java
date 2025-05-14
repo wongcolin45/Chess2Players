@@ -1,10 +1,9 @@
 package com.chess.game.Model.Pieces;
 
-import com.chess.game.Model.Board.Board;
-
 import java.util.List;
 
 import com.chess.game.Model.Color;
+import com.chess.game.Model.Game.ViewableGame;
 import com.chess.game.Model.Position;
 
 /**
@@ -15,11 +14,11 @@ public interface Piece {
 
   /**
    * This gets the list of all the pieces possible moves.
-   * @param board the board to use
+   * @param game the viewable game state
    * @param pos the position of the piece
    * @return the list of positions the piece can move to
    */
-  List<Position> getMoves(Board board, Position pos);
+  List<Position> getMoves(ViewableGame game, Position pos);
 
   /**
    * Gets the color of the piece.
