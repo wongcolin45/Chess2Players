@@ -37,14 +37,21 @@ public class Board implements MutableBoard {
   }
 
   @Override
-  public Piece removePiece(Position pos) {
+  public void removePiece(Position pos) {
     Square current = grid[pos.getRow()][pos.getCol()];
     if (!current.isOccupied()) {
       throw new IllegalArgumentException("There is no piece here to remove");
     }
     Piece piece = current.getPiece();
     current.clear();
-    return piece;
+  }
+
+  @Override
+  public Piece grabPiece(Position pos) {
+    if (isEmpty(pos)) {
+      throw new IllegalArgumentException("Position is empty");
+    }
+    return grid[pos.getRow()][pos.getCol()].getPiece();
   }
 
   private void placePiece(Color color, PieceType type, int r, int c) {
@@ -89,6 +96,7 @@ public class Board implements MutableBoard {
     }
     return getSquare(pos).getPiece();
   }
+
 
 
   private Square[][] getGridCopy(Square[][] grid) {

@@ -9,11 +9,12 @@ import ChessGame from "./ChessGame.tsx";
 
 
 
+
 function App(): JSX.Element {
 
 
     return (
-        <div>
+        <div className="App">
             <ChessGame />
         </div>
     );

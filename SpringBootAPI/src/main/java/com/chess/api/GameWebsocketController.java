@@ -33,10 +33,10 @@ public class GameWebsocketController {
     messagingTemplate.convertAndSend("/topic/gameState/"+gameId, session.getGameStateDTO());
   }
 
-  @MessageMapping("possible-moves/{gameId}")
-  public void getPossibleMoves(@DestinationVariable String gameId, PositionDTO positionDTO) {
+  @MessageMapping("possible-moves/{gameId}/{roleId}")
+  public void getPossibleMoves(@DestinationVariable String gameId, @DestinationVariable String roleId,PositionDTO positionDTO) {
     GameSession session = manager.getGameSession(gameId);
-    messagingTemplate.convertAndSend("/topic/possible-moves/"+gameId, session.getPossibleMoves(positionDTO));
+    messagingTemplate.convertAndSend("/topic/possible-moves/"+gameId+"/"+roleId, session.getPossibleMoves(positionDTO, roleId));
 
   }
 
@@ -46,7 +46,7 @@ public class GameWebsocketController {
     if (!session.canPromotePawn()) {
       throw new IllegalStateException("Can't promote pawn");
     }
-    session.promotePawn(pieceSelectionDTO.getPiece());
+    session.promotePawn(pieceSelectionDTO);
     messagingTemplate.convertAndSend("/topic/gameState/"+gameId, session.getGameStateDTO());
   }
 

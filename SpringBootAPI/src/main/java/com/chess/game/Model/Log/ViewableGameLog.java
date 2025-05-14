@@ -2,6 +2,8 @@ package com.chess.game.Model.Log;
 
 import com.chess.game.Model.Color;
 import com.chess.game.Model.Move;
+import com.chess.game.Model.Pieces.Piece;
+import com.chess.game.Model.Pieces.PieceType;
 import com.chess.game.Model.Position;
 
 import java.util.List;
@@ -16,6 +18,9 @@ public interface ViewableGameLog {
 
   List<Position> getLocations(Color color);
 
+  List<PieceType> getWhiteCaptures();
+
+  List<PieceType> getBlackCaptures();
 
   Stack<Move> getMoves();
 

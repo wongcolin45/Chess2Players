@@ -11,11 +11,18 @@ import java.util.List;
 
 public interface ViewableGame {
 
-
+  /**
+   * Checks if king is in chekc
+   * @param color the color of the king to check
+   * @return true if king in check, false otherwise
+   */
   boolean kingInCheck(Color color);
 
-  boolean canPromotePawn();
-
+  /**
+   * Check if the current turn player can promote there pawn
+   * @return true if promotion available, false otherwise
+   */
+  boolean promotionAvailable();
 
   /**
    * Get the turn.
@@ -42,7 +49,6 @@ public interface ViewableGame {
    */
   GameStatus getGameStatus();
 
-
   /**
    * Get the chess log object
    * @return the log
@@ -54,7 +60,6 @@ public interface ViewableGame {
    * @return the viewable chess board
    */
   ViewableBoard getViewableBoard();
-
 
   /**
    * Gets a mutable copy of the game.

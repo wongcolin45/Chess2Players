@@ -4,7 +4,16 @@
     background-color: antiquewhite;
 }
 
-
+.game-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 24px;
+    padding: 32px;
+    width: 100%;
+    box-sizing: border-box;
+}
 
 .selectGame {
     background-color: antiquewhite;
@@ -30,7 +39,6 @@
     border: none;
     border-radius: 15px;
     box-sizing: border-box;
-    margin:auto;
     border: 10px solid black;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
     margin-top: 8vh;
@@ -55,12 +63,19 @@
     background-color: antiquewhite;
 }
 
-.piece {
+.piece,
+.pieceSelection {
     height: 100%;
     width: 100%;
     /*pointer-events: none;*/
     /*user-select: none;*/
 }
+
+.piece:hover {
+    cursor: grab;
+}
+
+
 
 
 
@@ -102,6 +117,111 @@
 .selectGame button:active {
     transform: scale(0.98);
 }
+
+
+.pieceSelectionContainer {
+    position: absolute;
+    bottom: 100%;             /* position it directly above the square */
+    left: 50%;                /* center it horizontally */
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 10;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 6px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    margin-bottom: 4px;       /* optional: space between piece and selection */
+    height: 35px;
+}
+
+.pieceSelection {
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+.pieceSelection:hover {
+    transform: scale(1.1);
+}
+
+
+
+
+
+
+.game-info-panel {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    font-family: sans-serif;
+    margin-top: 10%;
+
+}
+
+.game-id,
+.game-state,
+.captured-pieces {
+    background-color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+
+.game-id strong,
+.captured-pieces strong,
+.captured-section img,
+.game-state div,
+.game-state strong,
+.pieces-row,
+.captured-section,
+.captured-section div {
+    background-color: white;
+}
+
+.game-state div {
+    margin-bottom: 10px;
+}
+
+.pieces-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 6px;
+}
+
+.piece-icon {
+    width: 32px;
+    height: 32px;
+}
+
+.flip-button {
+    padding: 10px 16px;
+    background-color: #222;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 330px;
+}
+
+.flip-button:hover {
+    background-color: #444;
+}
+
+.captured-section {
+    margin-bottom: 16px;
+}
+
+.captured-section img {
+    width: 10%;
+}
+
 
 
 

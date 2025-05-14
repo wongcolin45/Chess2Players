@@ -25,14 +25,18 @@ public class GameLog implements MutableGameLog {
   private final ConcurrentHashMap<Piece, Position> whiteLocations;
   private final ConcurrentHashMap<Piece, Position> blackLocations;
 
+  private List<PieceType> whiteCapturedPieces;
+  private List<PieceType> blackCapturedPieces;
+
   public GameLog() {
     moves = new Stack<>();
     whiteLocations = new ConcurrentHashMap<>();
     blackLocations = new ConcurrentHashMap<>();
+    whiteCapturedPieces = new ArrayList<>();
+    blackCapturedPieces = new ArrayList<>();
     fullMoveNumber = 0;
     halfMoveClock = 0;
   }
-
 
   @Override
   public void setPieceLocations(ViewableBoard board) {
@@ -75,6 +79,14 @@ public class GameLog implements MutableGameLog {
       halfMoveClock = 0;
     } else {
       halfMoveClock++;
+    }
+    if (move.isCapture()) {
+      Piece piece = move.getPiece();
+      if (color == Color.WHITE) {
+        whiteCapturedPieces.add(piece.getType());
+      } else {
+        blackCapturedPieces.add(piece.getType());
+      }
     }
   }
 
@@ -129,17 +141,29 @@ public class GameLog implements MutableGameLog {
     return moves.size();
   }
 
+  @Override
+  public List<PieceType> getWhiteCaptures() {
+    return whiteCapturedPieces;
+  }
 
-  private GameLog(Stack<Move> moves) {
+  @Override
+  public List<PieceType> getBlackCaptures() {
+    return blackCapturedPieces;
+  }
+
+
+  private GameLog(Stack<Move> moves, List<PieceType> whiteCapturedPieces, List<PieceType> blackCapturedPieces) {
     this();
     for (Move move : moves) {
       addMove(move);
     }
+    this.whiteCapturedPieces = new ArrayList<>(whiteCapturedPieces);
+    this.blackCapturedPieces = new ArrayList<>(blackCapturedPieces);
   }
 
   @Override
   public GameLog getCopy() {
-    return new GameLog(getMoves());
+    return new GameLog(getMoves(), whiteCapturedPieces, blackCapturedPieces);
   }
 
 

@@ -6,6 +6,7 @@ import Board from "./Board.tsx";
 import {connectWebSocket} from "./API/webSocketClient.ts";
 import {useGameStateStore} from "./store/ChessGameStore.ts";
 import SelectGame from "./SelectGame.tsx";
+import GameInfoPanel from "./GameInfoPanel.tsx";
 
 
 
@@ -29,8 +30,9 @@ const ChessGame = (): JSX.Element => {
     }
 
     return (
-        <div className='game'>
+        <div className='game-container'>
             {renderContents()}
+            <GameInfoPanel/>
         </div>
 
 

@@ -1,7 +1,9 @@
 package com.chess.api;
 
+import com.chess.api.dto.CapturedPiecesDTO;
 import com.chess.api.dto.GameStateDTO;
 import com.chess.api.dto.MoveDTO;
+import com.chess.api.dto.PieceSelectionDTO;
 import com.chess.api.dto.RoleAssignmentDTO;
 import com.chess.api.dto.PositionDTO;
 import com.chess.api.dto.PossibleMovesDTO;
@@ -17,6 +19,7 @@ import com.chess.game.Model.Position;
 import com.chess.game.View.ChessTerminalView;
 import com.chess.game.View.ChessView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,13 +28,15 @@ import java.util.UUID;
  */
 public class GameSession {
 
-  private final ChessGame chessGame;
+  final static String SPECTATOR_ID = "2004";
+
+  private final ChessGame game;
 
   private String whitePlayer;
   private String blackPlayer;
 
   public GameSession() {
-    chessGame = new ChessGame();
+    game = new ChessGame();
   }
 
   public RoleAssignmentDTO assignRole() {
@@ -43,7 +48,7 @@ public class GameSession {
       blackPlayer = String.valueOf(UUID.randomUUID().hashCode());
       return new RoleAssignmentDTO(blackPlayer, PlayerRole.BLACK);
     }
-    return new RoleAssignmentDTO("2930", PlayerRole.SPECTATOR);
+    return new RoleAssignmentDTO(SPECTATOR_ID, PlayerRole.SPECTATOR);
   }
 
   public void movePiece(MoveDTO moveDTO, String roleId) {
@@ -54,7 +59,7 @@ public class GameSession {
       throw new IllegalArgumentException("Invalid role");
     }
     Position from = getPosition(moveDTO.getFrom());
-    ViewableBoard board = chessGame.getViewableBoard();
+    ViewableBoard board = game.getViewableBoard();
     Piece piece = board.getPiece(from);
     if (roleId.equals(whitePlayer) && piece.getColor() == Color.BLACK) {
       throw new IllegalArgumentException("White piece cannot move black pieces");
@@ -63,11 +68,11 @@ public class GameSession {
       throw new IllegalArgumentException("Black piece cannot move white pieces");
     }
     Position to = getPosition(moveDTO.getTo());
-    chessGame.movePiece(from, to);
+    game.movePiece(from, to);
   }
 
   private String getEnPassantSquare() {
-    ViewableGameLog log = chessGame.getLog();
+    ViewableGameLog log = game.getLog();
     if (log.getMoveCount() == 0) {
       return "-";
     }
@@ -85,21 +90,21 @@ public class GameSession {
     } else {
       capturePos = new Position(row-1, col);
     }
-    ViewableBoard board = chessGame.getViewableBoard();
+    ViewableBoard board = game.getViewableBoard();
     Position leftPos = new Position(row, col-1);
     Position rightPos = new Position(row, col+1);
     if ((leftPos.onBoard() && !board.isEmpty(leftPos) &&
-        board.getPiece(leftPos).getType() == PieceType.PAWN && chessGame.getPossibleMoves(leftPos).contains(capturePos))
+        board.getPiece(leftPos).getType() == PieceType.PAWN && game.getPossibleMoves(leftPos).contains(capturePos))
         ||
         (rightPos.onBoard() && !board.isEmpty(rightPos) &&
-        board.getPiece(rightPos).getType() == PieceType.PAWN && chessGame.getPossibleMoves(rightPos).contains(capturePos))) {
+        board.getPiece(rightPos).getType() == PieceType.PAWN && game.getPossibleMoves(rightPos).contains(capturePos))) {
       return capturePos.toString();
     }
     return "-";
   }
 
   private String getCastlingAvailability() {
-    ViewableGameLog log = chessGame.getLog();
+    ViewableGameLog log = game.getLog();
     StringBuilder marks = new StringBuilder();
     // Check white side castles
     if (!log.squareMoved(new Position("e1"))) {
@@ -127,7 +132,7 @@ public class GameSession {
   }
 
   private String getPiecePlacement() {
-    ViewableBoard board = chessGame.getViewableBoard();
+    ViewableBoard board = game.getViewableBoard();
     String[][] grid = board.getTextGrid(Color.WHITE);
     StringBuilder boardString = new StringBuilder();
     for (int i = 0; i < 8; i++) {
@@ -158,25 +163,25 @@ public class GameSession {
 
   public String getFenState() {
     return getPiecePlacement() + " " +
-           chessGame.getTurn().toString().toLowerCase().charAt(0) + " " +
+           game.getTurn().toString().toLowerCase().charAt(0) + " " +
            getCastlingAvailability() + " " +
            getEnPassantSquare() + " " +
-           chessGame.getLog().getHalfMoves() + " " +
-           chessGame.getLog().getFullMoves();
+           game.getLog().getHalfMoves() + " " +
+           game.getLog().getFullMoves();
   }
 
-  public GameStateDTO getGameStateDTO() {
-    Color turn = chessGame.getTurn();
-    boolean kingInCheck = chessGame.kingInCheck(turn);
-    boolean gameOver = chessGame.isGameOver();
-    GameStatus result = chessGame.getGameStatus();
-    String[][] board = chessGame.getViewableBoard().getTextGrid();
-    return new GameStateDTO(turn, kingInCheck, gameOver, result, board);
-  }
+  public PossibleMovesDTO getPossibleMoves(PositionDTO positionDTO, String roleId) {
 
-  public PossibleMovesDTO getPossibleMoves(PositionDTO positionDTO) {
     Position pos = getPosition(positionDTO);
-    List<Position> possibleMoves = chessGame.getPossibleMoves(pos);
+    ViewableBoard board = game.getViewableBoard();
+    Piece piece = board.getPiece(pos);
+    if (roleId.equals(SPECTATOR_ID) ||
+        (roleId.equals(whitePlayer) &&  piece.getColor() == Color.BLACK) ||
+        (roleId.equals(blackPlayer) &&  piece.getColor() == Color.WHITE)) {
+      throw new IllegalArgumentException("Invalid role");
+    }
+
+    List<Position> possibleMoves = game.getPossibleMoves(pos);
     return new PossibleMovesDTO(possibleMoves);
   }
 
@@ -185,16 +190,78 @@ public class GameSession {
   }
 
   public boolean canPromotePawn() {
-    return chessGame.canPromotePawn();
+    return game.promotionAvailable();
   }
 
-  public void promotePawn(PieceType pieceType) {
-    chessGame.promotePawn(pieceType);
+  private PieceType getPieceType(String piece) {
+    if (piece.equalsIgnoreCase("N")) {
+      return PieceType.KNIGHT;
+    } else if (piece.equalsIgnoreCase("B")) {
+      return PieceType.BISHOP;
+    } else if (piece.equalsIgnoreCase("R")) {
+      return PieceType.ROOK;
+    } else if (piece.equalsIgnoreCase("Q")) {
+      return PieceType.QUEEN;
+    }
+    throw new IllegalArgumentException("Invalid piece");
+  }
+
+  public void promotePawn(PieceSelectionDTO pieceSelectionDTO) {
+    PieceType type = getPieceType(pieceSelectionDTO.getPiece());
+    game.promotePawn(type);
+  }
+
+  private List<String> getPieceSymbols(List<PieceType> pieceTypes, Color color) {
+    List<String> pieces = new ArrayList<>();
+    for (PieceType pieceType : pieceTypes) {
+      switch (pieceType) {
+        case PAWN:
+          pieces.add("P");
+        case KNIGHT:
+          pieces.add("N");
+        case BISHOP:
+          pieces.add("B");
+        case ROOK:
+          pieces.add("R");
+        case QUEEN:
+          pieces.add("Q");
+        default:
+          throw new IllegalArgumentException("Invalid piece type");
+      }
+    }
+    if (color == Color.BLACK) {
+      return pieces;
+    }
+    pieces.replaceAll(String::toLowerCase);
+    return pieces;
+
+  }
+
+  private CapturedPiecesDTO getCapturedPiecesDTO() {
+    ViewableGameLog log = game.getLog();
+    List<PieceType> whiteCaptures = log.getWhiteCaptures();
+    List<PieceType> blackCaptures = log.getBlackCaptures();
+    return new CapturedPiecesDTO(
+            getPieceSymbols(whiteCaptures, Color.WHITE),
+            getPieceSymbols(blackCaptures, Color.BLACK));
+  }
+
+  public GameStateDTO getGameStateDTO() {
+    PositionDTO pawnToPromote = new PositionDTO(-1,-1);
+    if (game.getPawnToPromote() != null) {
+      Position pos = game.getPawnToPromote();
+      pawnToPromote = new PositionDTO(pos.getRow(), pos.getCol());
+    }
+    return new GameStateDTO(
+            game.getTurn(), game.kingInCheck(game.getTurn()), game.isGameOver(),
+            pawnToPromote, getCapturedPiecesDTO(),
+            game.getGameStatus(),
+            game.getViewableBoard().getTextGrid());
   }
 
   @Override
   public String toString() {
-    ChessView view = new ChessTerminalView(chessGame);
+    ChessView view = new ChessTerminalView(game);
     return view.toString();
   }
 

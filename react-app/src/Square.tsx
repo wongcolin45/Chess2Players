@@ -1,9 +1,10 @@
-import {useMemo, type JSX, useState, useEffect, type CSSProperties} from "react";
+import React, {useMemo, type JSX, useState, useEffect, type CSSProperties} from "react";
 import { useDroppable } from '@dnd-kit/core';
 import Piece from "./Piece.tsx";
 import {type GameState, useGameStateStore} from "./store/ChessGameStore.ts";
 import type {PositionDTO} from "./dto.ts";
-
+import PromotionSelection from "./PromotionSelection.tsx";
+import type {State} from "./store/ChessGameStore.ts";
 
 interface SquareProps {
     row: number;
@@ -71,7 +72,6 @@ const Square = ({row, col, value}: SquareProps): JSX.Element => {
         return 'blank-square';
     },[row,col])
 
-
     const getSquareStyle: CSSProperties = useMemo(() => {
         if (!selectedPiece || (selectedPiece.row !== row || selectedPiece.col !== col)) {
             return {position: 'relative'}
@@ -83,10 +83,30 @@ const Square = ({row, col, value}: SquareProps): JSX.Element => {
     },[selectedPiece])
 
 
+    const renderContents = () => {
+        const state: State = useGameStateStore.getState().state;
+        const {pawnToPromote} = state;
+        const isTurn: boolean = useGameStateStore.getState().role === state.turn;
+        if (pawnToPromote.row === row && pawnToPromote.col === col && isTurn) {
+            return (
+                <>
+                    <PromotionSelection/>
+                    {(value !== ' ') && <Piece value={value} id={`${row},${col}`} selected={true} />}
+                </>
+
+            )
+        }
+        return (
+            <>
+                {style && <div style={style}></div>}
+                {(value !== ' ') && <Piece value={value} id={`${row},${col}`} selected={true} />}
+            </>
+        )
+    }
+
     return (
         <div ref={setNodeRef} className={className}  style={getSquareStyle}>
-            {style && <div style={style}></div>}
-            {(value !== ' ') && <Piece value={value} id={`${row},${col}`} selected={true} />}
+            {renderContents()}
         </div>
     )
 }

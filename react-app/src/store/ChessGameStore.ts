@@ -1,6 +1,6 @@
 
 import { create } from 'zustand'
-import type {PositionDTO} from "../dto.ts";
+import type {CapturedPiecesDTO, PositionDTO} from "../dto.ts";
 
 
 
@@ -10,6 +10,8 @@ export interface State {
     kingInCheck: boolean;
     gameOver: boolean;
     gameResult: string;
+    pawnToPromote: PositionDTO;
+    capturedPieces: CapturedPiecesDTO;
     board: string[][];
 }
 
@@ -41,6 +43,11 @@ const useGameStateStore = create<GameState>((set) => ({
         kingInCheck: false,
         gameOver: false,
         gameResult: '',
+        pawnToPromote: {row: -1, col: -1},
+        capturedPieces: {
+            whiteCaptures: [],
+            blackCaptures: []
+        },
         board: Array(8).fill(Array(8).fill(" ")),
     },
     updateState: (newState: State): void => set({ state: newState }),

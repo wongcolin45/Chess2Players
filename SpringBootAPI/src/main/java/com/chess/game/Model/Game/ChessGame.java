@@ -24,13 +24,9 @@ public class ChessGame implements SandboxGame {
 
   private final MutableBoard board;
   private final MutableGameLog log;
-
   private final ViewableKingSafetyChecker checker;
-
   private Position pawnToPromote;
   private Color turn;
-
-
 
   public ChessGame() {
     board = new Board();
@@ -47,7 +43,7 @@ public class ChessGame implements SandboxGame {
   }
 
   @Override
-  public boolean canPromotePawn() {
+  public boolean promotionAvailable() {
     return pawnToPromote != null;
   }
 
@@ -93,7 +89,9 @@ public class ChessGame implements SandboxGame {
 
   @Override
   public void movePiece(Position startPos, Position pos) {
-
+    if (pawnToPromote != null) {
+      throw new IllegalArgumentException("You must promote your pawn to finish your turn!");
+    }
     Square selectedSquare = board.getSquare(startPos);
     if (!selectedSquare.isOccupied()) {
       throw new IllegalArgumentException("There is no piece here to move");
@@ -158,6 +156,12 @@ public class ChessGame implements SandboxGame {
 
   @Override
   public void promotePawn(PieceType pieceType) {
+    if (pawnToPromote == null) {
+      throw new IllegalArgumentException("There is no pawn to promote!!");
+    }
+    if (pieceType == PieceType.PAWN || pieceType == PieceType.KING) {
+      throw new IllegalArgumentException("You cannot promote to a pawn or a king!");
+    }
     Piece piece = ChessPieceFactory.buildPiece(turn, pieceType);
     Square selectedSquare = board.getSquare(pawnToPromote);
     selectedSquare.clear();
@@ -166,6 +170,9 @@ public class ChessGame implements SandboxGame {
     turn = turn.opposing();
   }
 
+  public Position getPawnToPromote() {
+    return pawnToPromote;
+  }
 
   @Override
   public Color getTurn() {
@@ -176,7 +183,6 @@ public class ChessGame implements SandboxGame {
   public ViewableGameLog getLog() {
     return log;
   }
-
 
   @Override
   public ViewableBoard getViewableBoard() {
@@ -189,7 +195,6 @@ public class ChessGame implements SandboxGame {
     this.checker = new KingSafetyChecker(this);
     this.turn = turn;
   }
-
 
   @Override
   public SandboxGame getCopy() {

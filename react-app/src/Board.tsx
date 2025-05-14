@@ -5,6 +5,7 @@ import {DndContext, type DragEndEvent} from "@dnd-kit/core";
 import {getPossibleMoves, sendMove} from "./API/webSocketClient.ts";
 import {getPositionDTO} from "./utils.ts";
 import type {PositionDTO} from "./dto.ts";
+import {useDisplayStore} from "./store/DisplayStore.ts";
 
 
 
@@ -26,7 +27,6 @@ const Board = (): JSX.Element => {
         const fromDTO: PositionDTO = getPositionDTO(active.id.toString());
         const toDTO: PositionDTO = getPositionDTO(over.id.toString());
         sendMove(fromDTO, toDTO);
-
     };
 
     // const activeId= useMemo(() => {
@@ -38,13 +38,12 @@ const Board = (): JSX.Element => {
 
     const {board} = useGameStateStore((s) => s.state);
 
-    const role = useGameStateStore((s) => s.role);
+    const role: string = useGameStateStore((s): string => s.role);
+
+    const flipped: boolean = useDisplayStore((s): boolean => s.flipped);
 
     const renderBoard = () => {
-        const boardPov: string[][] =
-            useGameStateStore.getState().role === 'BLACK'
-                ? board.slice().reverse().map(row => [...row].reverse())
-                : board;
+        const boardPov: string[][] = (flipped) ? board.slice().reverse().map(row => [...row].reverse()) : board;
 
         return (
             <div className="board">
@@ -71,7 +70,6 @@ const Board = (): JSX.Element => {
 
     return (
         <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-            <span>{`Game Id: ${useGameStateStore.getState().gameId}`}</span>
             {renderBoard()}
             {/*<DragOverlay>*/}
             {/*    {activeId ? (*/}

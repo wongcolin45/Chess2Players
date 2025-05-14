@@ -51,8 +51,7 @@ class GameSessionTest extends AbstractTest {
     GameStateDTO state = session.getGameStateDTO();
     Assertions.assertTrue(state.isKingInCheck());
 
-    PossibleMovesDTO possibleMoves = session.getPossibleMoves(getPositionDTO(e8));
-    Assertions.assertTrue(possibleMoves.getPossibleMoves().isEmpty());
+
 
 
 

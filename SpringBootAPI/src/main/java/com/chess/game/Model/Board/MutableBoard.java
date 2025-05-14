@@ -19,10 +19,17 @@ public interface MutableBoard extends ViewableBoard {
   /**
    * Removes the piece at the given position
    * @param pos the position of the piece
-   * @return the removed Piece
    * @throws IllegalArgumentException if there is no piece at the position
    */
-  Piece removePiece(Position pos);
+  void removePiece(Position pos);
+
+  /**
+   * Removes the piece at the given position and returns the piece
+   * @param pos the position of the piece
+   * @return the piece on that position
+   * @throws IllegalArgumentException if there is no piece to
+   */
+  Piece grabPiece(Position pos);
 
   /**
    * Get the square object at given position.
