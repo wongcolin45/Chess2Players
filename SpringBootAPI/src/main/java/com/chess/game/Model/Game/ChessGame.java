@@ -16,8 +16,6 @@ import com.chess.game.Model.Pieces.ChessPieceFactory;
 import com.chess.game.Model.Pieces.Piece;
 import com.chess.game.Model.Pieces.PieceType;
 import com.chess.game.Model.Position;
-import com.chess.game.View.ChessTerminalView;
-import com.chess.game.View.ChessView;
 
 import java.util.ArrayList;
 import java.util.List;

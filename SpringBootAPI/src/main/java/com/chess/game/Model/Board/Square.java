@@ -3,43 +3,62 @@ package com.chess.game.Model.Board;
 import com.chess.game.Model.Pieces.Piece;
 import com.chess.game.Model.Position;
 
-/**
- * This represents a square on the chess board.
- */
-public interface Square {
+public class Square {
 
-  /**
-   * Tells whether this square is occupied.
-   * @return true if piece is here, otherwise false
-   */
-  boolean isOccupied();
+  private Piece piece;
+  private final Position pos;
+  private boolean occupied;
 
-  /**
-   * Gets the position of the square.
-   * @return the position
-   */
-  Position getPosition();
+  public Square(Position pos) {
+    this.pos = pos;
+    occupied = false;
+  }
 
-  /**
-   * Gets the piece on this square
-   * @return the piece
-   */
-  Piece getPiece();
 
-  /**
-   * This set the piece on this square.
-   * @param piece the place on this square
-   */
-  void setPiece(Piece piece);
+  public boolean isOccupied() {
+    return occupied;
+  }
 
-  /**
-   * Removes the piece from the square.
-   */
-  void clear();
 
-  /**
-   * Gets a deep copy of the square.
-   * @return the square copy
-   */
-  Square getCopy();
+  public Position getPosition() {
+    return pos;
+  }
+
+
+  public Piece getPiece() {
+    return piece;
+  }
+
+
+  public void setPiece(Piece piece) {
+    if (piece == null) {
+      throw new IllegalArgumentException("Piece cannot be null");
+    }
+    this.piece = piece;
+    occupied = true;
+  }
+
+
+  public void clear() {
+    piece = null;
+    occupied = false;
+  }
+
+
+  public Square getCopy() {
+    Square copy = new Square(pos);
+    if (isOccupied()) {
+      copy.setPiece(piece);
+    }
+    return copy;
+  }
+
+  public String toString() {
+    if (occupied) {
+      return piece.toString();
+
+    }
+    return " ";
+  }
+
 }
