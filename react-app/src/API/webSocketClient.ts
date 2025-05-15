@@ -67,6 +67,8 @@ export function sendMove(fromDTO: PositionDTO, toDTO: PositionDTO): void {
 
     const gameId: string = useGameStateStore.getState().gameId;
     const roleId: string = useGameStateStore.getState().roleId;
+    console.log('SENDING MOVE');
+    console.log(moveDTO);
     client.publish({
         destination: `/app/move-piece/${gameId}/${roleId}`,
         body: JSON.stringify(moveDTO),

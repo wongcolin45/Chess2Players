@@ -3,8 +3,10 @@ package com.chess.game.Model.Checker;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.chess.game.Model.Board.MutableBoard;
 import com.chess.game.Model.Board.ViewableBoard;
 import com.chess.game.Model.Color;
+import com.chess.game.Model.Game.ChessGame;
 import com.chess.game.Model.Game.SandboxGame;
 import com.chess.game.Model.Game.ViewableGame;
 import com.chess.game.Model.Pieces.ChessPieceFactory;
@@ -23,10 +25,12 @@ import com.chess.game.View.ChessView;
 public class KingSafetyChecker implements ViewableKingSafetyChecker {
 
   private final ViewableGame game;
+  private final ViewableBoard board;
 
 
   public KingSafetyChecker(ViewableGame game) {
     this.game = game;
+    board = this.game.getViewableBoard();
   }
 
   @Override
@@ -35,8 +39,6 @@ public class KingSafetyChecker implements ViewableKingSafetyChecker {
     if (kingPos == null) {
       return false;
     }
-
-    ViewableBoard board = game.getViewableBoard();
 
     Piece queen = ChessPieceFactory.buildPiece(color, PieceType.QUEEN);
     Piece knight = ChessPieceFactory.buildPiece(color, PieceType.KNIGHT);
@@ -98,28 +100,14 @@ public class KingSafetyChecker implements ViewableKingSafetyChecker {
     return false;
   }
 
-  @Override
-  public List<Position> filterMoves(Position start, List<Position> ends) {
-
-    ViewableBoard board = game.getViewableBoard();
-    if (board.isEmpty(start)) {
-      throw new IllegalArgumentException("There is no piece on "+start);
-    }
-
-    return getLegalMoves(start, ends);
-
-  }
-
   // Get moves that don't allow king to be captured
   private List<Position> getLegalMoves(Position start, List<Position> ends) {
-    Color turn = game.getViewableBoard().getPiece(start).getColor();
+    Color turn = board.getPiece(start).getColor();
     List<Position> moves = new ArrayList<>();
+    boolean wasInCheck = kingInCheck(turn);
     for (Position end : ends) {
       SandboxGame gameCopy = game.getCopy();
       gameCopy.forceMove(start, end);
-      boolean valid = !gameCopy.kingInCheck(turn);
-      System.out.println(valid);
-      new ChessTerminalView(gameCopy).render();
       if (!gameCopy.kingInCheck(turn)) {
         moves.add(end);
       }
@@ -127,8 +115,21 @@ public class KingSafetyChecker implements ViewableKingSafetyChecker {
     return filterNoCastlesInCheck(start, moves);
   }
 
+  @Override
+  public List<Position> filterMoves(Position start, List<Position> ends) {
+    if (board.isEmpty(start)) {
+      throw new IllegalArgumentException("There is no piece on "+start);
+    }
+    if (getKingPosition(board.getPiece(start).getColor()) == null) {
+      return ends;
+    }
+    if (!kingInCheck(board.getPiece(start).getColor()) && isPiecePinned(start)) {
+      return ends;
+    }
+    return getLegalMoves(start, ends);
+  }
+
   private List<Position> filterNoCastlesInCheck(Position start, List<Position> ends) {
-    ViewableBoard board = game.getViewableBoard();
     if (!(board.getPiece(start).getType() == PieceType.KING) || !kingInCheck(game.getTurn())) {
       return ends;
     }
@@ -146,27 +147,26 @@ public class KingSafetyChecker implements ViewableKingSafetyChecker {
     return Math.abs(pos.getRow() - kingPos.getRow()) == Math.abs(pos.getCol() - kingPos.getCol());
   }
 
-  @Override
-  public boolean isPiecePinned(Position pos) {
-    Color turn = game.getTurn();
-    SandboxGame gameCopy = game.getCopy();
-
-    gameCopy.clearSquare(pos);
-    return gameCopy.kingInCheck(turn);
+  private List<Position> getPinnerPositions(Color color) {
+    List<Position> pinnerPositions = new ArrayList<>();
+    List<Position> positions = game.getLog().getLocations(color);
+    for (Position position : positions) {
+      PieceType type = board.getPiece(position).getType();
+      if (type == PieceType.BISHOP || type == PieceType.ROOK || type == PieceType.QUEEN) {
+        pinnerPositions.add(position);
+      }
+    }
+    return pinnerPositions;
   }
 
   private boolean containsOpposingPiece(Color color, Position pos) {
-    ViewableBoard board = game.getViewableBoard();
     return !board.isEmpty(pos) && board.getPiece(pos).getColor() == color.opposing();
   }
 
   private Position getKingPosition(Color color) {
-    ViewableBoard board = game.getViewableBoard();
-    ChessView view = new ChessTerminalView(game);
     for (int r = 0; r < 8; r++) {
       for (int c = 0; c < 8; c++) {
         Position pos = new Position(r, c);
-        System.out.println(pos);
         if (!board.isEmpty(pos) &&
             board.getPiece(pos).getColor() == color &&
             board.getPiece(pos).getType() == PieceType.KING) {
@@ -178,6 +178,37 @@ public class KingSafetyChecker implements ViewableKingSafetyChecker {
     //throw new IllegalStateException("Cannot find the "+color.toString() + " king bro!\n"+board.getTextGrid());
   }
 
+  @Override
+  public boolean isPiecePinned(Position pos) {
+    Color turn = board.getPiece(pos).getColor();
+    Position kingPos = getKingPosition(turn);
+    List<Position> aroundKing = new ArrayList<>();
+    Piece queen = ChessPieceFactory.buildPiece(turn.opposing(), PieceType.QUEEN);
+    // built queen of opposite color and king and get captures to check for pieces above king
+    for (Position move : queen.getMoves(game, kingPos)) {
+      // check if contains pieces same color as king
+      if (containsOpposingPiece(turn, move)) {
+        aroundKing.add(move);
+      }
+    }
+    if (!aroundKing.contains(pos)) {
+      return false;
+    }
+    // get potential pinners
+    SandboxGame gameCopy;
+    List<Position> pinnerPositions = getPinnerPositions(turn.opposing());
+    for (Position pinnerPos : pinnerPositions) {
+      Piece pinner = board.getPiece(pinnerPos);
+      List<Position> moves = pinner.getMoves(game, kingPos);
+      gameCopy = game.getCopy();
+      gameCopy.clearSquare(pos);
+      List<Position> movesAfter  = pinner.getMoves(gameCopy, kingPos);
+      if (!moves.contains(pos) && movesAfter.contains(kingPos)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
 
 

@@ -63,6 +63,7 @@ public class ChessGame implements SandboxGame {
     if (log.getHalfMoves() >= 50) {
       return true;
     }
+    log.setPieceLocations(board);
     List<Position> locations = log.getLocations(turn);
     for (Position pos : locations) {
       if (pos != null && !getPossibleMoves(pos).isEmpty()) {

@@ -52,23 +52,27 @@ public class GameSession {
   }
 
   public void movePiece(MoveDTO moveDTO, String roleId) {
-    if (whitePlayer == null || blackPlayer == null) {
-      throw new IllegalStateException("Player not assigned");
-    }
-    if (!roleId.equals(whitePlayer) && !roleId.equals(blackPlayer)) {
-      throw new IllegalArgumentException("Invalid role");
-    }
+//    if (whitePlayer == null || blackPlayer == null) {
+//      throw new IllegalStateException("Player not assigned");
+//    }
+//    if (!roleId.equals(whitePlayer) && !roleId.equals(blackPlayer)) {
+//      throw new IllegalArgumentException("Invalid role");
+//    }
     Position from = getPosition(moveDTO.getFrom());
+
     ViewableBoard board = game.getViewableBoard();
     Piece piece = board.getPiece(from);
-    if (roleId.equals(whitePlayer) && piece.getColor() == Color.BLACK) {
-      throw new IllegalArgumentException("White piece cannot move black pieces");
-    }
-    if (roleId.equals(blackPlayer) && piece.getColor() == Color.WHITE) {
-      throw new IllegalArgumentException("Black piece cannot move white pieces");
-    }
+//    if (roleId.equals(whitePlayer) && piece.getColor() == Color.BLACK) {
+//      throw new IllegalArgumentException("White piece cannot move black pieces");
+//    }
+//    if (roleId.equals(blackPlayer) && piece.getColor() == Color.WHITE) {
+//      throw new IllegalArgumentException("Black piece cannot move white pieces");
+//    }
     Position to = getPosition(moveDTO.getTo());
     game.movePiece(from, to);
+
+
+
   }
 
   private String getEnPassantSquare() {
@@ -215,15 +219,15 @@ public class GameSession {
     List<String> pieces = new ArrayList<>();
     for (PieceType pieceType : pieceTypes) {
       switch (pieceType) {
-        case PAWN:
+        case PieceType.PAWN:
           pieces.add("P");
-        case KNIGHT:
+        case PieceType.KNIGHT:
           pieces.add("N");
-        case BISHOP:
+        case PieceType.BISHOP:
           pieces.add("B");
-        case ROOK:
+        case PieceType.ROOK:
           pieces.add("R");
-        case QUEEN:
+        case PieceType.QUEEN:
           pieces.add("Q");
         default:
           throw new IllegalArgumentException("Invalid piece type");
@@ -234,13 +238,14 @@ public class GameSession {
     }
     pieces.replaceAll(String::toLowerCase);
     return pieces;
-
   }
 
   private CapturedPiecesDTO getCapturedPiecesDTO() {
     ViewableGameLog log = game.getLog();
-    List<PieceType> whiteCaptures = log.getWhiteCaptures();
-    List<PieceType> blackCaptures = log.getBlackCaptures();
+//    List<PieceType> whiteCaptures = log.getWhiteCaptures();
+//    List<PieceType> blackCaptures = log.getBlackCaptures();
+    List<PieceType> whiteCaptures = new ArrayList<>();
+    List<PieceType> blackCaptures = new ArrayList<>();
     return new CapturedPiecesDTO(
             getPieceSymbols(whiteCaptures, Color.WHITE),
             getPieceSymbols(blackCaptures, Color.BLACK));

@@ -32,7 +32,7 @@ const ChessGame = (): JSX.Element => {
     return (
         <div className='game-container'>
             {renderContents()}
-            <GameInfoPanel/>
+            {(gameId !== '') && <GameInfoPanel/>}
         </div>
 
 

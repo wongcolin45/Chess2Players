@@ -38,6 +38,7 @@ public class GameLog implements MutableGameLog {
     halfMoveClock = 0;
   }
 
+  // update this later to much computation
   @Override
   public void setPieceLocations(ViewableBoard board) {
     if (board == null) {

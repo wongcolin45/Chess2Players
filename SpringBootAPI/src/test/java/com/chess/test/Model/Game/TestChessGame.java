@@ -24,5 +24,25 @@ public class TestChessGame extends AbstractTest {
     Assertions.assertTrue(moves.isEmpty());
   }
 
+  @Test
+  public void testCheckmate() {
+    // white: e2 to e4
+    game.movePiece(e2, e4);
+    // black: e7 to e5
+    game.movePiece(e7, e5);
+    // white
+    game.movePiece(f1, c4);
+    // black
+    game.movePiece(b8, c6);
+    // white
+    game.movePiece(d1, f3);
+    // black
+    game.movePiece(c6, d4);
+    // white
+    game.movePiece(f3, f7);
+    Assertions.assertTrue(game.isGameOver());
+    view.render();
+  }
+
 
 }
