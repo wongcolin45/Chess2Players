@@ -27,7 +27,6 @@ public class KingSafetyChecker implements ViewableKingSafetyChecker {
   private final ViewableGame game;
   private final ViewableBoard board;
 
-
   public KingSafetyChecker(ViewableGame game) {
     this.game = game;
     board = this.game.getViewableBoard();
