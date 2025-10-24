@@ -1,5 +1,5 @@
 import { useDraggable } from '@dnd-kit/core';
-import {useMemo} from "react";
+import React, {useMemo} from "react";
 
 const tags: Map<string, string> = new Map([
     ['P', 'wp'],
@@ -27,8 +27,8 @@ const Piece = ({value, id, selected}: PieceProps) => {
 
     const { attributes, listeners, setNodeRef, transform } = useDraggable({id: id});
 
-    const style = useMemo(() => {
-        const defaultStyle = {
+    const style: React.CSSProperties = useMemo(() => {
+        const defaultStyle: React.CSSProperties = {
             transform: transform
                 ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
                 : undefined,
