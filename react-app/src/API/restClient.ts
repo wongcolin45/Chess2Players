@@ -6,7 +6,7 @@ import type {RoleAssignmentDTO} from "../dto.ts";
 
 export const BASE_URL = 'https://chessapi-2jxt.onrender.com';
 
-async function createGame(): Promise<RoleAssignmentDTO> {
+async function createGame(): Promise<string> {
     try {
         const res = await axios.post(`${BASE_URL}/api/create-game`);
         console.log('Create Game got '+res.data)
@@ -17,7 +17,7 @@ async function createGame(): Promise<RoleAssignmentDTO> {
     }
 }
 
-async function joinGame(gameId: string): Promise<object> {
+async function joinGame(gameId: string): Promise<RoleAssignmentDTO> {
     try {
         const res = await axios.post(`${BASE_URL}/api/join-game/${gameId}`);
         console.log('Setting game id to '+gameId)

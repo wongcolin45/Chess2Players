@@ -22,7 +22,6 @@ const SelectGame: React.FC = () => {
         try {
             const data: RoleAssignmentDTO = await joinGame(input);
             const {role, roleId} = data;
-            console.log(`Data is ${JSON.stringify(data)}`);
             useGameStateStore.getState().setRole(role);
             useGameStateStore.getState().setRoleId(roleId);
         } catch (err) {

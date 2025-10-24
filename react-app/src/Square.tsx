@@ -1,7 +1,7 @@
-import React, {useMemo, type JSX, useState, useEffect, type CSSProperties} from "react";
+import {useMemo, type JSX, useState, useEffect, type CSSProperties} from "react";
 import { useDroppable } from '@dnd-kit/core';
 import Piece from "./Piece.tsx";
-import {type GameState, useGameStateStore} from "./store/ChessGameStore.ts";
+import {useGameStateStore} from "./store/ChessGameStore.ts";
 import type {PositionDTO} from "./dto.ts";
 import PromotionSelection from "./PromotionSelection.tsx";
 import type {State} from "./store/ChessGameStore.ts";
@@ -61,7 +61,8 @@ const Square = ({row, col, value}: SquareProps): JSX.Element => {
         setStyle(newStyles);
     },[possibleMoves])
 
-    const { isOver, setNodeRef } = useDroppable({
+    // could pull out is over
+    const { setNodeRef } = useDroppable({
         id: `${row},${col}`
     });
 
