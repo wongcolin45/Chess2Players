@@ -4,6 +4,7 @@ import { Client, type IFrame} from "@stomp/stompjs";
 import { useGameStateStore } from "../store/ChessGameStore.ts";
 import {getPositionDTO} from "../utils.ts";
 import type {PieceSelectionDTO, PositionDTO} from "../dto.ts";
+import {BASE_URL} from "./restClient.ts";
 
 
 let client: Client | null = null;
@@ -12,7 +13,7 @@ let client: Client | null = null;
 export function connectWebSocket(): void {
     if (client?.active) return; // Prevent multiple connections
 
-    const socket = new SockJS("http://localhost:8080/ws");
+    const socket = new SockJS(`${BASE_URL}/ws`);
 
     client = new Client({
         webSocketFactory: () => socket,
