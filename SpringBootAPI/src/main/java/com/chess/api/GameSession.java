@@ -55,9 +55,9 @@ public class GameSession {
 //    if (whitePlayer == null || blackPlayer == null) {
 //      throw new IllegalStateException("Player not assigned");
 //    }
-//    if (!roleId.equals(whitePlayer) && !roleId.equals(blackPlayer)) {
-//      throw new IllegalArgumentException("Invalid role");
-//    }
+    if (!roleId.equals(whitePlayer) && !roleId.equals(blackPlayer)) {
+      throw new IllegalArgumentException("Invalid role");
+    }
     Position from = getPosition(moveDTO.getFrom());
 
     ViewableBoard board = game.getViewableBoard();
