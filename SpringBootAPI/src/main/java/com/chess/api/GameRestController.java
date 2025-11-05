@@ -3,6 +3,7 @@ package com.chess.api;
 import com.chess.api.dto.RoleAssignmentDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +35,11 @@ public class GameRestController {
   public RoleAssignmentDTO joinGame(@PathVariable String gameId) {
     GameSession session = manager.getGameSession(gameId);
     return session.assignRole();
+  }
+
+  @DeleteMapping("/reset/games")
+  public void resetAllGames() {
+    manager.resetAllGameSessions();
   }
 
 

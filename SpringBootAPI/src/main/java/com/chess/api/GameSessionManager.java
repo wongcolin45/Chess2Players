@@ -28,5 +28,9 @@ public class GameSessionManager {
     return sessions.get(gameId);
   }
 
+  public void resetAllGameSessions() {
+    sessions.clear();
+  }
+
 
 }
