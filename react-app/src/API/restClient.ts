@@ -2,9 +2,8 @@ import axios from 'axios';
 import {useGameStateStore} from "../store/ChessGameStore.ts";
 import type {RoleAssignmentDTO} from "../dto.ts";
 
-// export const BASE_URL = 'http://localhost:8080';
-
-export const BASE_URL = 'https://chessapi-2jxt.onrender.com';
+export const BASE_URL =
+    import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080';
 
 async function createGame(): Promise<string> {
     try {
