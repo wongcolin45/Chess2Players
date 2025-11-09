@@ -34,14 +34,11 @@ export function connectWebSocket(): void {
             client?.subscribe(`/topic/gameState/${gameId}`, (msg): void => {
                 const data = JSON.parse(msg.body);
                 useGameStateStore.getState().updateState(data);
-                console.log("♟️ Received game state:", data);
             });
             const roleId: string = useGameStateStore.getState().roleId;
             // subscribe to getting possible moves
             client?.subscribe(`/topic/possible-moves/${gameId}/${roleId}`, (msg): void => {
                 const data = JSON.parse(msg.body);
-                console.log('Got possible moves');
-                console.log(data.possibleMoves);
                 useGameStateStore.getState().updatePossibleMoves(data.possibleMoves);
             })
         },
@@ -63,13 +60,9 @@ export function sendMove(fromDTO: PositionDTO, toDTO: PositionDTO): void {
         to: toDTO,
     };
 
-    // console.log('Sending move: ');
-    // console.log(moveDTO);
-
     const gameId: string = useGameStateStore.getState().gameId;
     const roleId: string = useGameStateStore.getState().roleId;
-    console.log('SENDING MOVE');
-    console.log(moveDTO);
+
     client.publish({
         destination: `/app/move-piece/${gameId}/${roleId}`,
         body: JSON.stringify(moveDTO),

@@ -50,7 +50,6 @@ const GameInfoPanel: React.FC = () => {
 
 
             <div className="game-state">
-                <div><strong>{'Turn: '}</strong>{(state.turn==='WHITE') ? '♔' : '♚'}</div>
                 <div><strong>{'In Check: '}</strong>{(state.kingInCheck) ? ' 😱' : '😌'}</div>
                 <div><strong>{'Result: '}</strong>{state.gameResult.toLowerCase().replace('_', ' ')}</div>
             </div>

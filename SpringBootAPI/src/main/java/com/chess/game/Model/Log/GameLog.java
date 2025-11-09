@@ -124,7 +124,11 @@ public class GameLog implements MutableGameLog {
 
   @Override
   public Stack<Move> getMoves() {
-    return moves;
+    Stack<Move> movesCopy = new Stack<>();
+    for (Move move : moves) {
+      movesCopy.push(move.copy());
+    }
+    return movesCopy;
   }
 
   @Override

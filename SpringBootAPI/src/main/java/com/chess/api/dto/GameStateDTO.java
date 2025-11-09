@@ -3,16 +3,20 @@ package com.chess.api.dto;
 import com.chess.game.Model.Color;
 import com.chess.game.Model.GameStatus;
 
+import java.util.Optional;
+
 public class GameStateDTO {
-  private Color turn;
-  private boolean kingInCheck;
-  private boolean gameOver;
-  private PositionDTO pawnToPromote;
-  private CapturedPiecesDTO capturedPieces;
-  private GameStatus gameStatus;
-  private String[][] board;
+  private final Color turn;
+  private final boolean kingInCheck;
+  private final boolean gameOver;
+  private final PositionDTO pawnToPromote;
+  private final CapturedPiecesDTO capturedPieces;
+  private final GameStatus gameStatus;
+  private final String[][] board;
+  private final MoveDTO lastMove;
   public GameStateDTO(Color turn,
                       boolean kingInCheck,
+                      Optional<MoveDTO> lastMove,
                       boolean gameOver,
                       PositionDTO pawnToPromote,
                       CapturedPiecesDTO capturedPieces,
@@ -20,6 +24,7 @@ public class GameStateDTO {
                       String[][] board) {
     this.turn = turn;
     this.kingInCheck = kingInCheck;
+    this.lastMove = lastMove.orElse(null);
     this.gameOver = gameOver;
     this.gameStatus = gameStatus;
     this.pawnToPromote = pawnToPromote;
@@ -28,6 +33,9 @@ public class GameStateDTO {
   }
   public Color getTurn() {
     return turn;
+  }
+  public MoveDTO getLastMove() {
+    return lastMove;
   }
   public boolean isKingInCheck() {
     return kingInCheck;

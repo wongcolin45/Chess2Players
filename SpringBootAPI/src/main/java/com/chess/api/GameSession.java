@@ -21,6 +21,7 @@ import com.chess.game.View.ChessView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -251,6 +252,17 @@ public class GameSession {
             getPieceSymbols(blackCaptures, Color.BLACK));
   }
 
+  private Optional<MoveDTO> getLastMoveDTO() {
+    ViewableGameLog log = game.getLog();
+    if (log.getMoveCount() == 0) {
+      return Optional.empty();
+    }
+    Move lastMove = log.getLastMove();
+    PositionDTO start = new PositionDTO(lastMove.getStart().getRow(), lastMove.getStart().getCol());
+    PositionDTO end = new PositionDTO(lastMove.getEnd().getRow(), lastMove.getEnd().getCol());
+    return Optional.of(new MoveDTO(start, end));
+  }
+
   public GameStateDTO getGameStateDTO() {
     PositionDTO pawnToPromote = new PositionDTO(-1,-1);
     if (game.getPawnToPromote() != null) {
@@ -258,8 +270,12 @@ public class GameSession {
       pawnToPromote = new PositionDTO(pos.getRow(), pos.getCol());
     }
     return new GameStateDTO(
-            game.getTurn(), game.kingInCheck(game.getTurn()), game.isGameOver(),
-            pawnToPromote, getCapturedPiecesDTO(),
+            game.getTurn(),
+            game.kingInCheck(game.getTurn()),
+            getLastMoveDTO(),
+            game.isGameOver(),
+            pawnToPromote,
+            getCapturedPiecesDTO(),
             game.getGameStatus(),
             game.getViewableBoard().getTextGrid());
   }

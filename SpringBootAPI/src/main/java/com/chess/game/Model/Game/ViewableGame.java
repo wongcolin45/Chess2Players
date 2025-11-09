@@ -4,6 +4,7 @@ import com.chess.game.Model.Board.ViewableBoard;
 import com.chess.game.Model.Color;
 import com.chess.game.Model.GameStatus;
 import com.chess.game.Model.Log.ViewableGameLog;
+import com.chess.game.Model.Move;
 import com.chess.game.Model.Position;
 
 import java.util.List;
@@ -42,6 +43,7 @@ public interface ViewableGame {
    * @return true if game over, otherwise false
    */
   boolean isGameOver();
+
 
   /**
    * Gets the result of the game.

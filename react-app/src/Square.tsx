@@ -13,14 +13,16 @@ interface SquareProps {
 }
 
 
-
 const Square = ({row, col, value}: SquareProps): JSX.Element => {
 
     const [style, setStyle] = useState<CSSProperties | undefined>(undefined);
 
-    const possibleMoves = useGameStateStore((s) => s.possibleMoves);
+    const possibleMoves = useGameStateStore(s => s.possibleMoves);
 
-    const selectedPiece = useGameStateStore((s) => s.selectedPiece);
+    const selectedPiece = useGameStateStore(s => s.selectedPiece);
+
+    const lastMove = useGameStateStore(s => s.state.lastMove);
+
 
     const getStyle = () => {
         const isPossibleMove: boolean = possibleMoves.some((move: PositionDTO): boolean => {
@@ -74,14 +76,23 @@ const Square = ({row, col, value}: SquareProps): JSX.Element => {
     },[row,col])
 
     const getSquareStyle: CSSProperties = useMemo(() => {
-        if (!selectedPiece || (selectedPiece.row !== row || selectedPiece.col !== col)) {
-            return {position: 'relative'}
+        const isLastMove: boolean =  (lastMove != null) &&
+            ((lastMove.from.row === row && lastMove.from.col == col) ||
+             (lastMove.to.row === row && lastMove.to.col == col));
+
+        const isSelectedPiece: boolean = selectedPiece !== null &&
+            (selectedPiece.row == row && selectedPiece.col == col)
+
+        if (isLastMove || isSelectedPiece) {
+            return {
+                position: 'relative',
+                backgroundColor: '#EEE8AA'
+            }
         }
         return {
             position: 'relative',
-            backgroundColor: '#EEE8AA'
         }
-    },[selectedPiece])
+    },[selectedPiece, lastMove])
 
 
     const renderContents = () => {

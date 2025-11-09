@@ -8,6 +8,7 @@ import type {CapturedPiecesDTO, PositionDTO} from "../dto.ts";
 export interface State {
     turn: string;
     kingInCheck: boolean;
+    lastMove: {from: PositionDTO, to: PositionDTO} | null;
     gameOver: boolean;
     gameResult: string;
     pawnToPromote: PositionDTO;
@@ -41,6 +42,7 @@ const useGameStateStore = create<GameState>((set) => ({
     state: {
         turn: 'white',
         kingInCheck: false,
+        lastMove: null,
         gameOver: false,
         gameResult: '',
         pawnToPromote: {row: -1, col: -1},
