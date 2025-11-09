@@ -1,0 +1,14 @@
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    width: 780px;
+    height: 780px;
+    border: none;
+    border-radius: 15px;
+    box-sizing: border-box;
+    border: 10px solid black;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    margin-top: 8vh;
+}

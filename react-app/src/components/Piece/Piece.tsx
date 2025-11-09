@@ -1,5 +1,6 @@
 import { useDraggable } from '@dnd-kit/core';
 import React, {useMemo} from "react";
+import styles from './Piece.module.css';
 
 const tags: Map<string, string> = new Map([
     ['P', 'wp'],
@@ -21,7 +22,6 @@ interface PieceProps {
     id: string;
     selected: boolean;
 }
-
 
 const Piece = ({value, id, selected}: PieceProps) => {
 
@@ -50,13 +50,12 @@ const Piece = ({value, id, selected}: PieceProps) => {
             ref={setNodeRef}
             src={link}
             alt="chess-piece"
-            className="piece"
+            className={styles.piece}
             style={style}
             {...listeners}
             {...attributes}
         />
     );
-
 }
 
 export default Piece;

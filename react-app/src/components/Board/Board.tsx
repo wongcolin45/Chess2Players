@@ -1,14 +1,12 @@
 import {type JSX} from "react";
-import {useGameStateStore} from "./store/ChessGameStore.ts";
-import Square from "./Square.tsx";
+import {useGameStateStore} from "../../store/ChessGameStore.ts";
+import Square from "../Square/Square.tsx";
 import {DndContext, type DragEndEvent} from "@dnd-kit/core";
-import {getPossibleMoves, sendMove} from "./API/webSocketClient.ts";
-import {getPositionDTO} from "./utils.ts";
-import type {PositionDTO} from "./dto.ts";
-import {useDisplayStore} from "./store/DisplayStore.ts";
-
-
-
+import {getPossibleMoves, sendMove} from "../../API/webSocketClient.ts";
+import {getPositionDTO} from "../../utils.ts";
+import type {PositionDTO} from "../../dto.ts";
+import {useDisplayStore} from "../../store/DisplayStore.ts";
+import styles from './Board.module.css';
 
 const Board = (): JSX.Element => {
 
@@ -29,14 +27,7 @@ const Board = (): JSX.Element => {
         sendMove(fromDTO, toDTO);
     };
 
-    // const activeId= useMemo(() => {
-    //     if (selectedPiece === null) {
-    //         return null;
-    //     }
-    //     return `${selectedPiece.row},${selectedPiece.col}`;
-    // },[selectedPiece]);
-
-    const {board} = useGameStateStore((s) => s.state);
+    const board = useGameStateStore((s) => s.state.board);
 
     const role: string = useGameStateStore((s): string => s.role);
 
@@ -46,7 +37,7 @@ const Board = (): JSX.Element => {
         const boardPov: string[][] = (flipped) ? board.slice().reverse().map(row => [...row].reverse()) : board;
 
         return (
-            <div className="board">
+            <div className={styles.board}>
                 {boardPov.flatMap((row: string[], rowIndex: number) =>
                     row.map((square: string, colIndex: number): JSX.Element => {
                         let actualRow: number = rowIndex;
@@ -71,15 +62,6 @@ const Board = (): JSX.Element => {
     return (
         <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
             {renderBoard()}
-            {/*<DragOverlay>*/}
-            {/*    {activeId ? (*/}
-            {/*        <Piece*/}
-            {/*            id={activeId}*/}
-            {/*            value={state.board[getPositionDTO(activeId).row][getPositionDTO(activeId).col]}*/}
-            {/*            selected={true}*/}
-            {/*        />*/}
-            {/*    ) : null}*/}
-            {/*</DragOverlay>*/}
         </DndContext>
     )
 }

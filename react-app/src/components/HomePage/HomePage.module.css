@@ -1,0 +1,41 @@
+
+
+.selectGame input {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+    border: 2px solid black;
+    border-radius: 8px;
+    background-color: white;
+    margin-bottom: 1rem;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.selectGame input:focus {
+    outline: none;
+    border-color: darksalmon;
+    box-shadow: 0 0 0 2px rgba(233, 150, 122, 0.4);
+}
+
+.selectGame button {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+    background-color: darksalmon;
+    color: black;
+    border: 2px solid black;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.selectGame button:hover {
+    background-color: #e28f75;
+}
+
+.selectGame button:active {
+    transform: scale(0.98);
+}
+

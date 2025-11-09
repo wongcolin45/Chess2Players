@@ -1,18 +1,16 @@
-import "./polyfill";
+import "../../polyfill.ts";
 import {type JSX, useEffect} from "react";
-import Board from "./Board.tsx";
-import {connectWebSocket} from "./API/webSocketClient.ts";
-import {useGameStateStore} from "./store/ChessGameStore.ts";
-import SelectGame from "./SelectGame.tsx";
-import GameInfoPanel from "./GameInfoPanel.tsx";
+import Board from "../Board/Board.tsx";
+import {connectWebSocket} from "../../API/webSocketClient.ts";
+import {useGameStateStore} from "../../store/ChessGameStore.ts";
+import HomePage from "../HomePage/HomePage.tsx";
+import GameInfoPanel from "../GameInfoPanel/GameInfoPanel.tsx";
+import styles from './MainContent.module.css'
 
-
-const ChessGame = (): JSX.Element => {
+const MainContent = (): JSX.Element => {
 
     const gameId: string = useGameStateStore.getState().gameId; // thins doesnt rerender
     const role: string = useGameStateStore((s) => s.role);
-    const lastMove = useGameStateStore((s => s.state.lastMove));
-    console.log('last Move is ' + JSON.stringify(lastMove, null, 2));
 
     useEffect((): void => {
         if (gameId !== '' && role !== '') {
@@ -22,18 +20,18 @@ const ChessGame = (): JSX.Element => {
 
     const renderContents = () => {
         if (gameId === '' && role === '') {
-            return <SelectGame/>;
+            return <HomePage/>;
         }
         return <Board/>
     }
 
     return (
-        <div className='game-container'>
+        <div className={styles.gameContainer}>
             {renderContents()}
             {(gameId !== '') && <GameInfoPanel/>}
         </div>
     )
 }
 
-export default ChessGame;
+export default MainContent;
 

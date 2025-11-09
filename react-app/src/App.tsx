@@ -2,7 +2,7 @@
 import {type JSX, useEffect} from 'react';
 
 
-import ChessGame from "./ChessGame.tsx";
+import MainContent from "./components/MainContent/MainContent.tsx";
 import {useGameStateStore} from "./store/ChessGameStore.ts";
 import {useDisplayStore} from "./store/DisplayStore.ts";
 
@@ -24,7 +24,7 @@ function App(): JSX.Element {
 
     return (
         <div className="App">
-            <ChessGame />
+            <MainContent />
         </div>
     );
 }

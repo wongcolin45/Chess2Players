@@ -1,10 +1,11 @@
 import {useMemo, type JSX, useState, useEffect, type CSSProperties} from "react";
 import { useDroppable } from '@dnd-kit/core';
-import Piece from "./Piece.tsx";
-import {useGameStateStore} from "./store/ChessGameStore.ts";
-import type {PositionDTO} from "./dto.ts";
-import PromotionSelection from "./PromotionSelection.tsx";
-import type {State} from "./store/ChessGameStore.ts";
+import Piece from "../Piece/Piece.tsx";
+import {useGameStateStore} from "../../store/ChessGameStore.ts";
+import type {PositionDTO} from "../../dto.ts";
+import PromotionSelection from "../PromotionSelection/PromotionSelection.tsx";
+import type {State} from "../../store/ChessGameStore.ts";
+import styles from './Square.module.css';
 
 interface SquareProps {
     row: number;
@@ -70,9 +71,9 @@ const Square = ({row, col, value}: SquareProps): JSX.Element => {
 
     const className: string = useMemo(() => {
         if ((row+col) % 2 != 0) {
-            return 'colored-square';
+            return styles.coloredSquare
         }
-        return 'blank-square';
+        return styles.blankSquare
     },[row,col])
 
     const getSquareStyle: CSSProperties = useMemo(() => {

@@ -1,0 +1,28 @@
+.gameInfoPanel {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    font-family: sans-serif;
+    margin-top: 10%;
+}
+
+.gameId,
+.gameState {
+    background-color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+
+.gameId strong,
+
+.gameState div,
+.gameState strong {
+    background-color: white;
+}
+
+
+
+
