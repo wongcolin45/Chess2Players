@@ -6,6 +6,8 @@ import type {PositionDTO} from "../../dto.ts";
 import PromotionSelection from "../PromotionSelection/PromotionSelection.tsx";
 import type {State} from "../../store/ChessGameStore.ts";
 import styles from './Square.module.css';
+import {useDisplayStore} from "../../store/DisplayStore.ts";
+import {isSamePosition} from "../../utils.ts";
 
 interface SquareProps {
     row: number;
@@ -27,6 +29,8 @@ const Square = ({row, col, value}: SquareProps): JSX.Element => {
     const inCheck = useGameStateStore(s => s.state.kingInCheck);
 
     const kingPosition = useGameStateStore(s => s.state.kingPosition);
+
+    const flipped = useDisplayStore(s=>s.flipped);
 
     const getStyle = () => {
         const isPossibleMove: boolean = possibleMoves.some((move: PositionDTO): boolean => {
@@ -80,10 +84,19 @@ const Square = ({row, col, value}: SquareProps): JSX.Element => {
     },[row,col])
 
     const getSquareStyle: CSSProperties = useMemo(() => {
-        const isLastMoveFrom: boolean = (lastMove != null) && (lastMove.from.row === row && lastMove.from.col == col);
-        const isLastMoveTo: boolean = (lastMove != null) && (lastMove.to.row === row && lastMove.to.col == col);
-        const isSelectedPiece: boolean = selectedPiece !== null && (selectedPiece.row == row && selectedPiece.col == col)
-        const isKingInCheck: boolean = inCheck && kingPosition.row == row && kingPosition.col == col;
+        let actualRow = row
+        let actualCol = col;
+        if (flipped) {
+            actualRow = 7 - row;
+            actualCol = 7-col;
+        }
+        const actualPosition = {
+            row: actualRow, col: actualCol
+        }
+        const isLastMoveFrom: boolean = (lastMove != null) && isSamePosition(lastMove.from, actualPosition);
+        const isLastMoveTo: boolean = (lastMove != null) && isSamePosition(lastMove.to, actualPosition);
+        const isSelectedPiece: boolean = selectedPiece !== null && (selectedPiece.row == row && selectedPiece.col == col);
+        const isKingInCheck: boolean = inCheck && kingPosition.row == actualRow && kingPosition.col == actualCol;
         const style: CSSProperties = { position: 'relative' };
 
         if (isKingInCheck) {
@@ -94,7 +107,9 @@ const Square = ({row, col, value}: SquareProps): JSX.Element => {
             style.backgroundColor = '#E6D98A';
         }
         return style;
-    },[selectedPiece, lastMove, kingPosition, inCheck])
+    },[selectedPiece, lastMove, kingPosition, inCheck, flipped, row, col])
+
+
 
 
     const renderContents = () => {

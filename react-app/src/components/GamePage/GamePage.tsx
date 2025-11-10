@@ -45,7 +45,7 @@ const GamePage = (): JSX.Element => {
     return (
         <div className={styles.gamePage}>
 
-            <h1>Game not found</h1>
+            {/*<h1>Game not found</h1>*/}
             <div className={styles.gameContainer}>
                 <Board/>
                 <GameInfoPanel/>

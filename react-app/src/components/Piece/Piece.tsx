@@ -45,6 +45,8 @@ const Piece = ({value, id, selected}: PieceProps) => {
 
     const link: string = (`https://assets-themes.chess.com/image/ejgfv/150/${tags.get(value)}.png`)
 
+
+
     return (
         <img
             ref={setNodeRef}

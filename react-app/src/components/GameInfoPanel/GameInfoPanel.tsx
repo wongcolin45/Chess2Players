@@ -12,6 +12,8 @@ const GameInfoPanel: React.FC = () => {
 
     // const {whiteCaptures, blackCaptures} = state.capturedPieces
 
+    const flipBoard = useDisplayStore(s => s.flipBoard);
+
     const navigate = useNavigate();
 
     const handleFlipBoardClick = (): void => useDisplayStore.getState().flipBoard();
@@ -19,6 +21,7 @@ const GameInfoPanel: React.FC = () => {
     const handleNewGameClick = (): void => {
         clearPlayerId();
         navigate('/');
+        flipBoard();
     }
 
     return (

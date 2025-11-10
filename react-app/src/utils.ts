@@ -9,7 +9,12 @@ function getPositionDTO(id: string): PositionDTO {
     }
 }
 
+function isSamePosition(x: PositionDTO, y: PositionDTO) {
+    return x.row == y.row && x.col == y.col;
+}
+
 
 export {
-    getPositionDTO
+    getPositionDTO,
+    isSamePosition
 }
