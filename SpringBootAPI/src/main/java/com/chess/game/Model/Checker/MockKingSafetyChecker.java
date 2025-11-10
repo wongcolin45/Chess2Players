@@ -17,6 +17,11 @@ public class MockKingSafetyChecker implements ViewableKingSafetyChecker {
   }
 
   @Override
+  public Position getKingPosition(Color color) {
+    return new Position(-1, -1);
+  }
+
+  @Override
   public List<Position> filterMoves(Position start, List<Position> ends) {
     return ends;
   }

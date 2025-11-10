@@ -162,7 +162,8 @@ public class KingSafetyChecker implements ViewableKingSafetyChecker {
     return !board.isEmpty(pos) && board.getPiece(pos).getColor() == color.opposing();
   }
 
-  private Position getKingPosition(Color color) {
+  @Override
+  public Position getKingPosition(Color color) {
     for (int r = 0; r < 8; r++) {
       for (int c = 0; c < 8; c++) {
         Position pos = new Position(r, c);

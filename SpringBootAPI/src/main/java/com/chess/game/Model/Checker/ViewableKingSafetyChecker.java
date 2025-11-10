@@ -11,6 +11,8 @@ public interface ViewableKingSafetyChecker {
 
   boolean isPiecePinned(Position pos);
 
+  Position getKingPosition(Color color);
+
   List<Position> filterMoves(Position start, List<Position> ends);
 
 }

@@ -20,11 +20,10 @@ const GameInfoPanel: React.FC = () => {
             </div>
 
             <div className={styles.gameState}>
-                <div><strong>{'In Check: '}</strong>{(state.kingInCheck) ? ' 😱' : '😌'}</div>
                 <div><strong>{'Result: '}</strong>{state.gameResult.toLowerCase().replace('_', ' ')}</div>
             </div>
 
-            <button className="flip-button" onClick={handleFlipBoardClick}>Flip Board</button>
+            <button className={styles.flipButton} onClick={handleFlipBoardClick}>Flip Board</button>
         </div>
     );
 };

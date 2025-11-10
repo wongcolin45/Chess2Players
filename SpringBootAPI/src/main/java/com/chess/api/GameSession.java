@@ -1,7 +1,7 @@
 package com.chess.api;
 
-import com.chess.api.dto.CapturedPiecesDTO;
 import com.chess.api.dto.GameStateDTO;
+import com.chess.api.dto.GameStateDTOConverter;
 import com.chess.api.dto.MoveDTO;
 import com.chess.api.dto.PieceSelectionDTO;
 import com.chess.api.dto.RoleAssignmentDTO;
@@ -10,7 +10,6 @@ import com.chess.api.dto.PossibleMovesDTO;
 import com.chess.game.Model.Board.ViewableBoard;
 import com.chess.game.Model.Color;
 import com.chess.game.Model.Game.ChessGame;
-import com.chess.game.Model.GameStatus;
 import com.chess.game.Model.Log.ViewableGameLog;
 import com.chess.game.Model.Move;
 import com.chess.game.Model.Pieces.Piece;
@@ -18,10 +17,7 @@ import com.chess.game.Model.Pieces.PieceType;
 import com.chess.game.Model.Position;
 import com.chess.game.View.ChessTerminalView;
 import com.chess.game.View.ChessView;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -216,68 +212,8 @@ public class GameSession {
     game.promotePawn(type);
   }
 
-  private List<String> getPieceSymbols(List<PieceType> pieceTypes, Color color) {
-    List<String> pieces = new ArrayList<>();
-    for (PieceType pieceType : pieceTypes) {
-      switch (pieceType) {
-        case PieceType.PAWN:
-          pieces.add("P");
-        case PieceType.KNIGHT:
-          pieces.add("N");
-        case PieceType.BISHOP:
-          pieces.add("B");
-        case PieceType.ROOK:
-          pieces.add("R");
-        case PieceType.QUEEN:
-          pieces.add("Q");
-        default:
-          throw new IllegalArgumentException("Invalid piece type");
-      }
-    }
-    if (color == Color.BLACK) {
-      return pieces;
-    }
-    pieces.replaceAll(String::toLowerCase);
-    return pieces;
-  }
-
-  private CapturedPiecesDTO getCapturedPiecesDTO() {
-    ViewableGameLog log = game.getLog();
-//    List<PieceType> whiteCaptures = log.getWhiteCaptures();
-//    List<PieceType> blackCaptures = log.getBlackCaptures();
-    List<PieceType> whiteCaptures = new ArrayList<>();
-    List<PieceType> blackCaptures = new ArrayList<>();
-    return new CapturedPiecesDTO(
-            getPieceSymbols(whiteCaptures, Color.WHITE),
-            getPieceSymbols(blackCaptures, Color.BLACK));
-  }
-
-  private Optional<MoveDTO> getLastMoveDTO() {
-    ViewableGameLog log = game.getLog();
-    if (log.getMoveCount() == 0) {
-      return Optional.empty();
-    }
-    Move lastMove = log.getLastMove();
-    PositionDTO start = new PositionDTO(lastMove.getStart().getRow(), lastMove.getStart().getCol());
-    PositionDTO end = new PositionDTO(lastMove.getEnd().getRow(), lastMove.getEnd().getCol());
-    return Optional.of(new MoveDTO(start, end));
-  }
-
   public GameStateDTO getGameStateDTO() {
-    PositionDTO pawnToPromote = new PositionDTO(-1,-1);
-    if (game.getPawnToPromote() != null) {
-      Position pos = game.getPawnToPromote();
-      pawnToPromote = new PositionDTO(pos.getRow(), pos.getCol());
-    }
-    return new GameStateDTO(
-            game.getTurn(),
-            game.kingInCheck(game.getTurn()),
-            getLastMoveDTO(),
-            game.isGameOver(),
-            pawnToPromote,
-            getCapturedPiecesDTO(),
-            game.getGameStatus(),
-            game.getViewableBoard().getTextGrid());
+    return GameStateDTOConverter.getGameStateDTO(game);
   }
 
   @Override

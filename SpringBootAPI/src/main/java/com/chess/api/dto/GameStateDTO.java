@@ -14,15 +14,18 @@ public class GameStateDTO {
   private final GameStatus gameStatus;
   private final String[][] board;
   private final MoveDTO lastMove;
+  private final PositionDTO kingPosition;
   public GameStateDTO(Color turn,
                       boolean kingInCheck,
                       Optional<MoveDTO> lastMove,
+                      PositionDTO kingPosition,
                       boolean gameOver,
                       PositionDTO pawnToPromote,
                       CapturedPiecesDTO capturedPieces,
                       GameStatus gameStatus,
                       String[][] board) {
     this.turn = turn;
+    this.kingPosition = kingPosition;
     this.kingInCheck = kingInCheck;
     this.lastMove = lastMove.orElse(null);
     this.gameOver = gameOver;
@@ -36,6 +39,9 @@ public class GameStateDTO {
   }
   public MoveDTO getLastMove() {
     return lastMove;
+  }
+  public PositionDTO getKingPosition() {
+    return kingPosition;
   }
   public boolean isKingInCheck() {
     return kingInCheck;

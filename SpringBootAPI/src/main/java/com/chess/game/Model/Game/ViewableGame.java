@@ -44,6 +44,18 @@ public interface ViewableGame {
    */
   boolean isGameOver();
 
+  /**
+   * Get the position of the king
+   * @param color the color of the king to get
+   * @return the king's position
+   */
+  Position getKingPosition(Color color);
+
+  /**
+   * Get position of pawn to promote
+   * @return position of pawn
+   */
+  Position getPromotionPosition();
 
   /**
    * Gets the result of the game.

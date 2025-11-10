@@ -74,6 +74,11 @@ public class ChessGame implements SandboxGame {
   }
 
   @Override
+  public Position getKingPosition(Color color) {
+    return checker.getKingPosition(color);
+  }
+
+  @Override
   public GameStatus getGameStatus() {
     if (!isGameOver()) {
       return GameStatus.IN_PROGRESS;
@@ -171,7 +176,11 @@ public class ChessGame implements SandboxGame {
     turn = turn.opposing();
   }
 
-  public Position getPawnToPromote() {
+  @Override
+  public Position getPromotionPosition() {
+    if (!promotionAvailable()) {
+      throw new IllegalArgumentException("There is no pawn to promote!!");
+    }
     return pawnToPromote;
   }
 

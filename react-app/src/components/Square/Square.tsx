@@ -24,6 +24,9 @@ const Square = ({row, col, value}: SquareProps): JSX.Element => {
 
     const lastMove = useGameStateStore(s => s.state.lastMove);
 
+    const inCheck = useGameStateStore(s => s.state.kingInCheck);
+
+    const kingPosition = useGameStateStore(s => s.state.kingPosition);
 
     const getStyle = () => {
         const isPossibleMove: boolean = possibleMoves.some((move: PositionDTO): boolean => {
@@ -77,23 +80,21 @@ const Square = ({row, col, value}: SquareProps): JSX.Element => {
     },[row,col])
 
     const getSquareStyle: CSSProperties = useMemo(() => {
-        const isLastMove: boolean =  (lastMove != null) &&
-            ((lastMove.from.row === row && lastMove.from.col == col) ||
-             (lastMove.to.row === row && lastMove.to.col == col));
+        const isLastMoveFrom: boolean = (lastMove != null) && (lastMove.from.row === row && lastMove.from.col == col);
+        const isLastMoveTo: boolean = (lastMove != null) && (lastMove.to.row === row && lastMove.to.col == col);
+        const isSelectedPiece: boolean = selectedPiece !== null && (selectedPiece.row == row && selectedPiece.col == col)
+        const isKingInCheck: boolean = inCheck && kingPosition.row == row && kingPosition.col == col;
+        const style: CSSProperties = { position: 'relative' };
 
-        const isSelectedPiece: boolean = selectedPiece !== null &&
-            (selectedPiece.row == row && selectedPiece.col == col)
-
-        if (isLastMove || isSelectedPiece) {
-            return {
-                position: 'relative',
-                backgroundColor: '#EEE8AA'
-            }
+        if (isKingInCheck) {
+            style.backgroundColor = '#FF6B6B';
+        } else if (isLastMoveFrom || isSelectedPiece) {
+            style.backgroundColor = '#EEE8AA';
+        } else if (isLastMoveTo) {
+            style.backgroundColor = '#E6D98A';
         }
-        return {
-            position: 'relative',
-        }
-    },[selectedPiece, lastMove])
+        return style;
+    },[selectedPiece, lastMove, kingPosition, inCheck])
 
 
     const renderContents = () => {

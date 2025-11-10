@@ -23,6 +23,21 @@
     background-color: white;
 }
 
+.flipButton {
+    padding: 10px 16px;
+    background-color: #222;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 330px;
+}
+
+.flipButton:hover {
+    background-color: #444;
+}
+
 
 
 

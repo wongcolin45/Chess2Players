@@ -9,6 +9,7 @@ export interface State {
     turn: string;
     kingInCheck: boolean;
     lastMove: {from: PositionDTO, to: PositionDTO} | null;
+    kingPosition: PositionDTO;
     gameOver: boolean;
     gameResult: string;
     pawnToPromote: PositionDTO;
@@ -43,6 +44,7 @@ const useGameStateStore = create<GameState>((set) => ({
         turn: 'white',
         kingInCheck: false,
         lastMove: null,
+        kingPosition: {row: -1, col: -1},
         gameOver: false,
         gameResult: '',
         pawnToPromote: {row: -1, col: -1},
