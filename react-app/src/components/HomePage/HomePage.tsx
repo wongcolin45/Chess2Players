@@ -3,11 +3,13 @@ import {useGameStateStore} from "../../store/ChessGameStore.ts";
 import {createGame, joinGame} from "../../API/restClient.ts";
 import type {RoleAssignmentDTO} from "../../dto.ts";
 import styles from './HomePage.module.css';
+import {useNavigate} from "react-router-dom";
 
 const HomePage: React.FC = () => {
 
     const [createdId, setCreatedId] = useState('');
     const [input, setInput] = useState('');
+    const navigate = useNavigate();
 
     const handleCreateGameClick = async () => {
         try {
@@ -25,6 +27,7 @@ const HomePage: React.FC = () => {
             const {role, roleId} = data;
             useGameStateStore.getState().setRole(role);
             useGameStateStore.getState().setRoleId(roleId);
+            navigate(`/game/${input.trim()}`);
         } catch (err) {
             console.error(`Error joining game: ${err}`);
         }

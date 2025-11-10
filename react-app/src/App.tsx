@@ -1,16 +1,9 @@
-
 import {type JSX, useEffect} from 'react';
-
-
-import MainContent from "./components/MainContent/MainContent.tsx";
 import {useGameStateStore} from "./store/ChessGameStore.ts";
 import {useDisplayStore} from "./store/DisplayStore.ts";
-
-
-
-
-
-
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import HomePage from "./components/HomePage/HomePage.tsx";
+import GamePage from "./components/GamePage/GamePage.tsx";
 
 function App(): JSX.Element {
 
@@ -23,9 +16,12 @@ function App(): JSX.Element {
     }, [role]);
 
     return (
-        <div className="App">
-            <MainContent />
-        </div>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/game/:gameId" element={<GamePage/>} />
+                <Route path="/" element={<HomePage/>} />
+            </Routes>
+        </BrowserRouter>
     );
 }
 

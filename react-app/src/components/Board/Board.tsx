@@ -8,6 +8,7 @@ import type {PositionDTO} from "../../dto.ts";
 import {useDisplayStore} from "../../store/DisplayStore.ts";
 import styles from './Board.module.css';
 
+
 const Board = (): JSX.Element => {
 
     const handleDragStart = (event: DragEndEvent): void => {
@@ -36,7 +37,7 @@ const Board = (): JSX.Element => {
     const renderBoard = () => {
         const boardPov: string[][] = (flipped) ? board.slice().reverse().map(row => [...row].reverse()) : board;
 
-        return (
+        return  (
             <div className={styles.board}>
                 {boardPov.flatMap((row: string[], rowIndex: number) =>
                     row.map((square: string, colIndex: number): JSX.Element => {

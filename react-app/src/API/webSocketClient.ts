@@ -5,10 +5,9 @@ import { useGameStateStore } from "../store/ChessGameStore.ts";
 import {getPositionDTO} from "../utils.ts";
 import type {PieceSelectionDTO, PositionDTO} from "../dto.ts";
 import {BASE_URL} from "./restClient.ts";
-
+import {getPlayerId} from "../store/playerIdStore.ts";
 
 let client: Client | null = null;
-
 
 export function connectWebSocket(): void {
     if (client?.active) return; // Prevent multiple connections
@@ -61,10 +60,9 @@ export function sendMove(fromDTO: PositionDTO, toDTO: PositionDTO): void {
     };
 
     const gameId: string = useGameStateStore.getState().gameId;
-    const roleId: string = useGameStateStore.getState().roleId;
 
     client.publish({
-        destination: `/app/move-piece/${gameId}/${roleId}`,
+        destination: `/app/move-piece/${gameId}/${getPlayerId()}`,
         body: JSON.stringify(moveDTO),
     });
 }

@@ -7,6 +7,7 @@ public class RoleAssignmentDTO {
   private final String roleId;
   private final PlayerRole role;
 
+
   public RoleAssignmentDTO(String roleId, PlayerRole role) {
     this.roleId = roleId;
     this.role = role;
