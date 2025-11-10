@@ -1,4 +1,11 @@
 
+.gamePage h1 {
+    text-align: center;
+    margin-top: 5vh;
+    font-size: 50px;
+}
+
+
 .gameContainer {
     display: flex;
     flex-direction: row;
@@ -8,4 +15,10 @@
     padding: 32px;
     width: 100%;
     box-sizing: border-box;
+}
+
+.homeButton {
+    border: none;
+    font-size: 50px;
+    margin: 0;
 }

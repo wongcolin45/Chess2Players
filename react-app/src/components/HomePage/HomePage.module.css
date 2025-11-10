@@ -1,13 +1,28 @@
 
 
+.selectGame {
+    background-color: antiquewhite;
+    border-radius: 15px;
+    box-sizing: border-box;
+    border: 10px solid black;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    margin: 8vh auto auto;
+    height: 100%;
+    width: min(92vw, 28rem);
+    min-height: 10rem;
+    padding: 5vh;
+    display: grid;
+    gap: 1rem;
+}
+
 .selectGame input {
     width: 100%;
+    box-sizing: border-box;
     padding: 0.6rem 1rem;
     font-size: 1rem;
     border: 2px solid black;
     border-radius: 8px;
     background-color: white;
-    margin-bottom: 1rem;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -27,7 +42,6 @@
     border: 2px solid black;
     border-radius: 8px;
     cursor: pointer;
-    margin-bottom: 1rem;
     transition: background-color 0.2s ease, transform 0.1s ease;
 }
 

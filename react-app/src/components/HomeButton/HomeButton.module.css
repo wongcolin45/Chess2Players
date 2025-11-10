@@ -1,0 +1,13 @@
+
+.navContainer {
+
+}
+
+.homeButton {
+    background-color: white;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 0.5vh 3vh;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}

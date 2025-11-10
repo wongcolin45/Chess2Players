@@ -25,6 +25,21 @@
 
 .flipButton {
     padding: 10px 16px;
+    background-color: white;
+    color: black;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 330px;
+}
+
+.flipButton:hover {
+    background-color: lightgrey;
+}
+
+.newGameButton {
+    padding: 10px 16px;
     background-color: #222;
     color: #fff;
     border: none;
@@ -34,9 +49,11 @@
     width: 330px;
 }
 
-.flipButton:hover {
+.newGameButton:hover {
     background-color: #444;
 }
+
+
 
 
 

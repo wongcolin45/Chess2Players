@@ -8,6 +8,8 @@ import styles from './GamePage.module.css'
 import {useParams} from "react-router-dom";
 
 
+
+
 const GamePage = (): JSX.Element => {
 
     const {gameId: urlGameId} = useParams<{gameId: string}>();
@@ -37,9 +39,13 @@ const GamePage = (): JSX.Element => {
     }
 
     return (
-        <div className={styles.gameContainer}>
-            <Board/>
-            <GameInfoPanel/>
+        <div className={styles.gamePage}>
+
+            <h1>Game not found</h1>
+            <div className={styles.gameContainer}>
+                <Board/>
+                <GameInfoPanel/>
+            </div>
         </div>
     )
 }
