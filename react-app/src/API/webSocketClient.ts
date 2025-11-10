@@ -5,7 +5,7 @@ import { useGameStateStore } from "../store/ChessGameStore.ts";
 import {getPositionDTO} from "../utils.ts";
 import type {PieceSelectionDTO, PositionDTO} from "../dto.ts";
 import {BASE_URL} from "./restClient.ts";
-import {getPlayerId, setPlayerId} from "../store/playerIdStore.ts";
+import {getPlayerId} from "../store/playerIdStore.ts";
 
 let client: Client | null = null;
 
