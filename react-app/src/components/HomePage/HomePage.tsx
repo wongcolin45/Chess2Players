@@ -28,7 +28,6 @@ const HomePage: React.FC = () => {
             useGameStateStore.getState().setRole(role);
             useGameStateStore.getState().setRoleId(roleId);
             navigate(`/game/${input.trim()}`);
-
         } catch (err) {
             console.error(`Error joining game: ${err}`);
         }

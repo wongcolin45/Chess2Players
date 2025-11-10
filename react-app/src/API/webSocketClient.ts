@@ -13,7 +13,7 @@ export function connectWebSocket(): void {
     if (client?.active) return; // Prevent multiple connections
 
     const socket = new SockJS(`${BASE_URL}/ws`);
-
+    console.log('Connecting to WebSocket');
     client = new Client({
         webSocketFactory: () => socket,
         reconnectDelay: 5000,
@@ -91,3 +91,12 @@ export function promotePawn(piece: string): void {
         body: JSON.stringify(pieceSelection),
     })
 }
+
+export function disconnectWebSocket() {
+    const c = client;
+    client = null;
+    if (!c) return;
+    c.reconnectDelay = 0 as any;
+    void c.deactivate().catch(() => {});
+}
+
