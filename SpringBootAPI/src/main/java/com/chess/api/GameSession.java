@@ -179,7 +179,7 @@ public class GameSession {
     if (roleId.equals(SPECTATOR_ID) ||
         (roleId.equals(whitePlayer) &&  piece.getColor() == Color.BLACK) ||
         (roleId.equals(blackPlayer) &&  piece.getColor() == Color.WHITE)) {
-      throw new IllegalArgumentException("Invalid role");
+      throw new IllegalArgumentException("Invalid role "+roleId + "whie is "+whitePlayer + "black is "+blackPlayer);
     }
 
     List<Position> possibleMoves = game.getPossibleMoves(pos);

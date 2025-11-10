@@ -5,7 +5,7 @@ import { useGameStateStore } from "../store/ChessGameStore.ts";
 import {getPositionDTO} from "../utils.ts";
 import type {PieceSelectionDTO, PositionDTO} from "../dto.ts";
 import {BASE_URL} from "./restClient.ts";
-import {getPlayerId} from "../store/playerIdStore.ts";
+import {getPlayerId, setPlayerId} from "../store/playerIdStore.ts";
 
 let client: Client | null = null;
 
@@ -34,9 +34,8 @@ export function connectWebSocket(): void {
                 const data = JSON.parse(msg.body);
                 useGameStateStore.getState().updateState(data);
             });
-            const roleId: string = useGameStateStore.getState().roleId;
             // subscribe to getting possible moves
-            client?.subscribe(`/topic/possible-moves/${gameId}/${roleId}`, (msg): void => {
+            client?.subscribe(`/topic/possible-moves/${gameId}/${getPlayerId()}`, (msg): void => {
                 const data = JSON.parse(msg.body);
                 useGameStateStore.getState().updatePossibleMoves(data.possibleMoves);
             })
@@ -74,9 +73,8 @@ export function getPossibleMoves(id: string): void {
     }
     const PositionDTO: PositionDTO = getPositionDTO(id);
     const gameId: string = useGameStateStore.getState().gameId;
-    const roleId: string = useGameStateStore.getState().roleId;
     client.publish({
-        destination: `/app/possible-moves/${gameId}/${roleId}`,
+        destination: `/app/possible-moves/${gameId}/${getPlayerId()}`,
         body: JSON.stringify(PositionDTO),
     })
 }
@@ -88,7 +86,6 @@ export function promotePawn(piece: string): void {
     }
     const pieceSelection: PieceSelectionDTO = {piece: piece}
     const gameId: string = useGameStateStore.getState().gameId;
-    // const roleId: string = useGameStateStore.getState().roleId;
     client.publish({
         destination: `/app/promote-pawn/${gameId}`,
         body: JSON.stringify(pieceSelection),
