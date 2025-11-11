@@ -37,6 +37,12 @@ public class GameRestController {
     return session.assignRole();
   }
 
+  @GetMapping("game/{gameId}/{roleId}")
+  public RoleAssignmentDTO getGameRole(@PathVariable String gameId, @PathVariable String roleId) {
+    GameSession session = manager.getGameSession(gameId);
+    return session.getRole(roleId);
+  }
+
   @DeleteMapping("/reset/games")
   public void resetAllGames() {
     manager.resetAllGameSessions();

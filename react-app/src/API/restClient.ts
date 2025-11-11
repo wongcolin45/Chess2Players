@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {useGameStateStore} from "../store/ChessGameStore.ts";
 import type {RoleAssignmentDTO} from "../dto.ts";
-import {setPlayerId} from "../store/playerIdStore.ts";
+import {setRoleId} from "../store/playerIdStore.ts";
 
 export const BASE_URL =
     import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080';
@@ -10,7 +10,7 @@ async function createGame(): Promise<string> {
     try {
         const res = await axios.post(`${BASE_URL}/api/create-game`);
         console.log('Create Game got '+res.data);
-        setPlayerId(res.data.roleId);
+        setRoleId(res.data.roleId);
         return res.data;
     } catch (err) {
         console.error(`Unable to createGame: ${err}`);
@@ -23,8 +23,20 @@ async function joinGame(gameId: string): Promise<RoleAssignmentDTO> {
         const res = await axios.post(`${BASE_URL}/api/join-game/${gameId}`);
         console.log('Setting game id to '+gameId)
         useGameStateStore.getState().setGameId(gameId);
-        setPlayerId(res.data.roleId);
+        setRoleId(res.data.roleId);
         return res.data;
+    } catch (err) {
+        console.error(`Unable to createGame: ${err}`);
+        throw err;
+    }
+}
+
+async function getGameRole(gameId: string, roleId: string): Promise<RoleAssignmentDTO> {
+    try {
+        const res = await axios.get(`${BASE_URL}/api/game/${gameId}/${roleId}`);
+        console.log('role is ' +res.data.roleId);
+        setRoleId(res.data.roleId);
+        return res.data.role;
     } catch (err) {
         console.error(`Unable to createGame: ${err}`);
         throw err;
@@ -35,4 +47,5 @@ async function joinGame(gameId: string): Promise<RoleAssignmentDTO> {
 export {
     createGame,
     joinGame,
+    getGameRole
 }

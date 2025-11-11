@@ -5,7 +5,6 @@ const HomeButton = () => {
         <div className={styles.navContainer}>
             <button className={styles.homeButton}>Home</button>
         </div>
-
     )
 }
 

@@ -1,15 +1,21 @@
 import React, {useState} from "react";
-import {useGameStateStore} from "../../store/ChessGameStore.ts";
 import {createGame, joinGame} from "../../API/restClient.ts";
 import type {RoleAssignmentDTO} from "../../dto.ts";
 import styles from './HomePage.module.css';
-import {useNavigate} from "react-router-dom";
+import {type NavigateFunction, useNavigate} from "react-router-dom";
+import { useDisplayStore } from "../../store/DisplayStore.ts";
 
 const HomePage: React.FC = () => {
 
     const [createdId, setCreatedId] = useState('');
     const [input, setInput] = useState('');
-    const navigate = useNavigate();
+    const navigate: NavigateFunction = useNavigate();
+
+    const setRole: (role: string) => void = useDisplayStore(s => s.setRole);
+
+    const flipped: boolean = useDisplayStore(s => s.flipped);
+
+    const flipBoard: () => void = useDisplayStore(s => s.flipBoard);
 
     const handleCreateGameClick = async () => {
         try {
@@ -24,9 +30,10 @@ const HomePage: React.FC = () => {
     const handleJoinGameClick = async () => {
         try {
             const data: RoleAssignmentDTO = await joinGame(input);
-            const {role, roleId} = data;
-            useGameStateStore.getState().setRole(role);
-            useGameStateStore.getState().setRoleId(roleId);
+            setRole(data.role);
+            if ((data.role === 'WHITE' && flipped) || (data.role === 'BLACK' && !flipped)) {
+                flipBoard();
+            }
             navigate(`/game/${input.trim()}`);
         } catch (err) {
             console.error(`Error joining game: ${err}`);

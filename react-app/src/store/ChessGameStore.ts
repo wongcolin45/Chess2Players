@@ -20,10 +20,6 @@ export interface State {
 export interface GameState {
     gameId: string;
     setGameId: (id: string) => void;
-    roleId: string;
-    setRoleId: (id: string) => void;
-    role: string;
-    setRole: (role: string) => void;
     state: State;
     updateState: (state: State) => void;
     possibleMoves: PositionDTO[];
@@ -36,10 +32,6 @@ export interface GameState {
 const useGameStateStore = create<GameState>((set) => ({
     gameId: '',
     setGameId: (id: string): void => set({ gameId: id}),
-    roleId: '',
-    setRoleId: (id: string): void => set({ roleId: id }),
-    role: '',
-    setRole: (role: string): void => set({ role: role }),
     state: {
         turn: 'white',
         kingInCheck: false,

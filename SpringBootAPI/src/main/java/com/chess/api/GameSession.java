@@ -36,6 +36,15 @@ public class GameSession {
     game = new ChessGame();
   }
 
+  public RoleAssignmentDTO getRole(String roleId) {
+    if (whitePlayer.equals(roleId)) {
+      return new RoleAssignmentDTO(whitePlayer, PlayerRole.WHITE);
+    } else if (blackPlayer.equals(roleId)) {
+      return new RoleAssignmentDTO(blackPlayer, PlayerRole.BLACK);
+    }
+    return new RoleAssignmentDTO(SPECTATOR_ID, PlayerRole.SPECTATOR);
+  }
+
   public RoleAssignmentDTO assignRole() {
     if (whitePlayer == null) {
       whitePlayer = String.valueOf(UUID.randomUUID().hashCode());

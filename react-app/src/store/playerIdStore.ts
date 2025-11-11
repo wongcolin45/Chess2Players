@@ -1,20 +1,21 @@
-// playerIdStore.ts
+
+
 const KEY = 'playerId';
 
 
-function getPlayerId(): string | null {
+function getRoleId(): string | null {
     return localStorage.getItem(KEY);
 }
-function setPlayerId(id: string) {
+function setRoleId(id: string) {
     localStorage.setItem(KEY, id);
 }
-function clearPlayerId() {
+function clearRoleId() {
     localStorage.removeItem(KEY);
 }
 
 export {
-    getPlayerId,
-    setPlayerId,
-    clearPlayerId
+    getRoleId,
+    setRoleId,
+    clearRoleId
 }
 

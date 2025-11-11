@@ -5,7 +5,8 @@ import { useGameStateStore } from "../store/ChessGameStore.ts";
 import {getPositionDTO} from "../utils.ts";
 import type {PieceSelectionDTO, PositionDTO} from "../dto.ts";
 import {BASE_URL} from "./restClient.ts";
-import {getPlayerId} from "../store/playerIdStore.ts";
+import {getRoleId} from "../store/playerIdStore.ts";
+
 
 let client: Client | null = null;
 
@@ -32,10 +33,11 @@ export function connectWebSocket(): void {
             // subscribe to getting game state
             client?.subscribe(`/topic/gameState/${gameId}`, (msg): void => {
                 const data = JSON.parse(msg.body);
+
                 useGameStateStore.getState().updateState(data);
             });
             // subscribe to getting possible moves
-            client?.subscribe(`/topic/possible-moves/${gameId}/${getPlayerId()}`, (msg): void => {
+            client?.subscribe(`/topic/possible-moves/${gameId}/${getRoleId()}`, (msg): void => {
                 const data = JSON.parse(msg.body);
                 useGameStateStore.getState().updatePossibleMoves(data.possibleMoves);
             })
@@ -61,7 +63,7 @@ export function sendMove(fromDTO: PositionDTO, toDTO: PositionDTO): void {
     const gameId: string = useGameStateStore.getState().gameId;
 
     client.publish({
-        destination: `/app/move-piece/${gameId}/${getPlayerId()}`,
+        destination: `/app/move-piece/${gameId}/${getRoleId()}`,
         body: JSON.stringify(moveDTO),
     });
 }
@@ -74,7 +76,7 @@ export function getPossibleMoves(id: string): void {
     const PositionDTO: PositionDTO = getPositionDTO(id);
     const gameId: string = useGameStateStore.getState().gameId;
     client.publish({
-        destination: `/app/possible-moves/${gameId}/${getPlayerId()}`,
+        destination: `/app/possible-moves/${gameId}/${getRoleId()}`,
         body: JSON.stringify(PositionDTO),
     })
 }
@@ -96,7 +98,7 @@ export function disconnectWebSocket() {
     const c = client;
     client = null;
     if (!c) return;
-    c.reconnectDelay = 0 as any;
+    c.reconnectDelay = 0;
     void c.deactivate().catch(() => {});
 }
 

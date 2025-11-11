@@ -25,12 +25,11 @@ const Board = (): JSX.Element => {
         if (!over || !active) return;
         const fromDTO: PositionDTO = getPositionDTO(active.id.toString());
         const toDTO: PositionDTO = getPositionDTO(over.id.toString());
+
         sendMove(fromDTO, toDTO);
     };
 
     const board = useGameStateStore((s) => s.state.board);
-
-    const role: string = useGameStateStore((s): string => s.role);
 
     const flipped: boolean = useDisplayStore((s): boolean => s.flipped);
 
@@ -43,7 +42,7 @@ const Board = (): JSX.Element => {
                     row.map((square: string, colIndex: number): JSX.Element => {
                         let actualRow: number = rowIndex;
                         let actualCol: number = colIndex;
-                        if (role === 'BLACK') {
+                        if (flipped) {
                             actualRow = 7 - actualRow;
                             actualCol = 7 - actualCol;
                         }

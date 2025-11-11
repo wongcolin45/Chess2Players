@@ -25,7 +25,6 @@ const GamePage = (): JSX.Element => {
 
 
     useEffect((): void => {
-        console.log('game id changed');
         if (!gameId) {
             return;
         }
