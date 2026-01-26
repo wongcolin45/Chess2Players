@@ -7,8 +7,8 @@ import { useDisplayStore } from "../../store/DisplayStore.ts";
 
 const HomePage: React.FC = () => {
 
-    const [createdId, setCreatedId] = useState('');
     const [input, setInput] = useState('');
+    // const [color, setColor] = useState('');
     const navigate: NavigateFunction = useNavigate();
 
     const setRole: (role: string) => void = useDisplayStore(s => s.setRole);
@@ -20,8 +20,8 @@ const HomePage: React.FC = () => {
     const handleCreateGameClick = async () => {
         try {
             const gameId: string = await createGame();
-            setCreatedId(gameId);
-            console.log('set created id to '+createdId);
+            setInput(gameId);
+            await handleJoinGameClick();
         } catch (err) {
             console.error(`Error creating game: ${err}`);
         }
@@ -40,15 +40,21 @@ const HomePage: React.FC = () => {
         }
     }
 
+
     return (
         <div className={styles.selectGame}>
             <h1>2 Player Chess </h1>
-            <input type="text" value={createdId} placeholder="Enter game name" />
-            <button onClick={handleCreateGameClick}>Create Game</button>
+
             <input type="text"
                    value={input}
                    onChange={(e) => setInput(e.target.value)}
                    placeholder="Enter Game ID" />
+
+            {/*<div className={styles.selectColor}>*/}
+            {/*    <button id={styles.whiteButton} onClick={() => setColor('white')}>white</button>*/}
+            {/*    <button id={styles.blackButton} onClick={() => setColor('black')}>black</button>*/}
+            {/*</div>*/}
+            <button onClick={handleCreateGameClick}>Create Game</button>
             <button onClick={handleJoinGameClick}>Join Game</button>
         </div>
     );

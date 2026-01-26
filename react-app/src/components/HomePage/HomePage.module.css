@@ -53,3 +53,23 @@
     transform: scale(0.98);
 }
 
+
+.selectColor {
+    display: flex;
+    gap: 1rem;
+}
+
+.selectColor button {
+
+}
+
+#whiteButton {
+    background-color: white;
+}
+#blackButton {
+    background-color: black;
+    color: white;
+}
+
+
+

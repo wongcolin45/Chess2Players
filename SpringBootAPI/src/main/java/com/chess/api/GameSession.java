@@ -59,26 +59,24 @@ public class GameSession {
 
   public void movePiece(MoveDTO moveDTO, String roleId) {
 //    if (whitePlayer == null || blackPlayer == null) {
-//      throw new IllegalStateException("Player not assigned");
+//      throw new IllegalStateException("One player not assigned");
 //    }
-    if (!roleId.equals(whitePlayer) && !roleId.equals(blackPlayer)) {
-      throw new IllegalArgumentException("Invalid role");
-    }
+//    if (!roleId.equals(whitePlayer) && !roleId.equals(blackPlayer)) {
+//      throw new IllegalArgumentException("Invalid role");
+//    }
     Position from = getPosition(moveDTO.getFrom());
-
     ViewableBoard board = game.getViewableBoard();
     Piece piece = board.getPiece(from);
+
 //    if (roleId.equals(whitePlayer) && piece.getColor() == Color.BLACK) {
 //      throw new IllegalArgumentException("White piece cannot move black pieces");
 //    }
 //    if (roleId.equals(blackPlayer) && piece.getColor() == Color.WHITE) {
 //      throw new IllegalArgumentException("Black piece cannot move white pieces");
 //    }
+
     Position to = getPosition(moveDTO.getTo());
     game.movePiece(from, to);
-
-
-
   }
 
   private String getEnPassantSquare() {

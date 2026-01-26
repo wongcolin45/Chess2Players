@@ -7,6 +7,7 @@ import PromotionSelection from "../PromotionSelection/PromotionSelection.tsx";
 import type {State} from "../../store/ChessGameStore.ts";
 import styles from './Square.module.css';
 import {isSamePosition} from "../../utils.ts";
+import {useDisplayStore} from "../../store/DisplayStore.ts";
 
 interface SquareProps {
     row: number;
@@ -103,7 +104,7 @@ const Square = ({row, col, value}: SquareProps): JSX.Element => {
     const renderContents = () => {
         const state: State = useGameStateStore.getState().state;
         const {pawnToPromote} = state;
-        const isTurn: boolean = useGameStateStore.getState().role === state.turn;
+        const isTurn: boolean = useDisplayStore.getState().role === state.turn;
         if (pawnToPromote.row === row && pawnToPromote.col === col && isTurn) {
             return (
                 <>

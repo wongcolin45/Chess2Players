@@ -1,5 +1,4 @@
 import React, {type CSSProperties, useMemo} from "react";
-import {useGameStateStore} from "../../store/ChessGameStore.ts";
 import {promotePawn} from "../../API/webSocketClient.ts";
 import {type DisplayState, useDisplayStore} from "../../store/DisplayStore.ts";
 import styles from './PromotionSelection.module.css';
@@ -24,7 +23,7 @@ const blackPromotions: string[] = ['n', 'b', 'r', 'q'];
 
 const PromotionSelection: React.FC = () => {
 
-    const role: string = useGameStateStore.getState().role;
+    const role: string = useDisplayStore.getState().role;
 
     const pieces: string[] = (role == 'WHITE') ? whitePromotions : blackPromotions;
 
