@@ -13,9 +13,3 @@ Demo: https://vimeo.com/1158548808/a7a6f831f0?share=copy&fl=sv&fe=ci
 - 🔄 Live move suggestions and captured piece tracking
 - ⚙️ Object-oriented chess engine with modular design
 
-## Tech Stack
-
-| Frontend              | Backend              | Communication     |
-|-----------------------|----------------------|--------------------|
-| React 19 + TypeScript | Spring Boot (Java 21) | WebSocket (STOMP)  |
-| Zustand + Vite        | JUnit + Maven         | SockJS             |
