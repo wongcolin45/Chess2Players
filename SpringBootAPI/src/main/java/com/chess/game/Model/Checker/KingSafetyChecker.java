@@ -3,18 +3,14 @@ package com.chess.game.Model.Checker;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.chess.game.Model.Board.MutableBoard;
 import com.chess.game.Model.Board.ViewableBoard;
 import com.chess.game.Model.Color;
-import com.chess.game.Model.Game.ChessGame;
 import com.chess.game.Model.Game.SandboxGame;
 import com.chess.game.Model.Game.ViewableGame;
 import com.chess.game.Model.Pieces.ChessPieceFactory;
 import com.chess.game.Model.Pieces.Piece;
 import com.chess.game.Model.Pieces.PieceType;
 import com.chess.game.Model.Position;
-import com.chess.game.View.ChessTerminalView;
-import com.chess.game.View.ChessView;
 
 /**
  * This is the chess board check that handles:
@@ -182,28 +178,17 @@ public class KingSafetyChecker implements ViewableKingSafetyChecker {
   public boolean isPiecePinned(Position pos) {
     Color turn = board.getPiece(pos).getColor();
     Position kingPos = getKingPosition(turn);
-    List<Position> aroundKing = new ArrayList<>();
-    Piece queen = ChessPieceFactory.buildPiece(turn.opposing(), PieceType.QUEEN);
-    // built queen of opposite color and king and get captures to check for pieces above king
-    for (Position move : queen.getMoves(game, kingPos)) {
-      // check if contains pieces same color as king
-      if (containsOpposingPiece(turn, move)) {
-        aroundKing.add(move);
-      }
-    }
-    if (!aroundKing.contains(pos)) {
-      return false;
-    }
-    // get potential pinners
-    SandboxGame gameCopy;
     List<Position> pinnerPositions = getPinnerPositions(turn.opposing());
     for (Position pinnerPos : pinnerPositions) {
       Piece pinner = board.getPiece(pinnerPos);
-      List<Position> moves = pinner.getMoves(game, kingPos);
-      gameCopy = game.getCopy();
+      List<Position> moves = pinner.getMoves(game, pinnerPos);
+      if (!moves.contains(pos)) {
+        continue;
+      }
+      SandboxGame gameCopy = game.getCopy();
       gameCopy.clearSquare(pos);
-      List<Position> movesAfter  = pinner.getMoves(gameCopy, kingPos);
-      if (!moves.contains(pos) && movesAfter.contains(kingPos)) {
+      List<Position> movesAfter = pinner.getMoves(gameCopy, pinnerPos);
+      if (movesAfter.contains(kingPos)) {
         return true;
       }
     }

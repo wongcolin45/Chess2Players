@@ -17,6 +17,7 @@ const GamePage = (): JSX.Element => {
     const {gameId: urlGameId} = useParams<{gameId: string}>();
     const gameId: string = useGameStateStore(s => s.gameId);
     const setGameId = useGameStateStore(s => s.setGameId);
+    const gameLoaded = useGameStateStore(s => s.gameLoaded);
     const setRole = useDisplayStore(s => s.setRole);
     const flipped = useDisplayStore(s => s.flipped);
     const flipBoard = useDisplayStore(s => s.flipBoard);
@@ -80,6 +81,17 @@ const GamePage = (): JSX.Element => {
                 <div className={styles.joinCard}>
                     <div className={styles.joinIcon}>♟</div>
                     <p className={styles.joinSubtitle}>Reconnecting…</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (joined && !gameLoaded) {
+        return (
+            <div className={styles.joinScreen}>
+                <div className={styles.joinCard}>
+                    <div className={styles.spinner}></div>
+                    <p className={styles.joinSubtitle}>Connecting to game…</p>
                 </div>
             </div>
         );

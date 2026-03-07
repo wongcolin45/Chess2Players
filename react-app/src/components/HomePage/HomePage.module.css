@@ -164,8 +164,13 @@
     background-color: #d4735a;
 }
 
-.primaryButton:active {
+.primaryButton:active:not(:disabled) {
     transform: scale(0.98);
+}
+
+.primaryButton:disabled {
+    opacity: 0.6;
+    cursor: default;
 }
 
 .secondaryButton {
@@ -185,8 +190,13 @@
     background-color: #333;
 }
 
-.secondaryButton:active {
+.secondaryButton:active:not(:disabled) {
     transform: scale(0.98);
+}
+
+.secondaryButton:disabled {
+    opacity: 0.6;
+    cursor: default;
 }
 
 .divider {

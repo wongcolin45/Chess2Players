@@ -20,6 +20,7 @@ export interface State {
 export interface GameState {
     gameId: string;
     setGameId: (id: string) => void;
+    gameLoaded: boolean;
     state: State;
     updateState: (state: State) => void;
     possibleMoves: PositionDTO[];
@@ -31,7 +32,8 @@ export interface GameState {
 
 const useGameStateStore = create<GameState>((set) => ({
     gameId: '',
-    setGameId: (id: string): void => set({ gameId: id}),
+    setGameId: (id: string): void => set({ gameId: id, gameLoaded: false }),
+    gameLoaded: false,
     state: {
         turn: 'white',
         kingInCheck: false,
@@ -46,7 +48,7 @@ const useGameStateStore = create<GameState>((set) => ({
         },
         board: Array(8).fill(Array(8).fill(" ")),
     },
-    updateState: (newState: State): void => set({ state: newState }),
+    updateState: (newState: State): void => set({ state: newState, gameLoaded: true }),
     possibleMoves: [],
     updatePossibleMoves: (newMoves: PositionDTO[]): void => set({ possibleMoves: newMoves }),
     selectedPiece: null,

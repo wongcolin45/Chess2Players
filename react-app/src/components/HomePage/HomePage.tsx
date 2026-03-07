@@ -12,6 +12,7 @@ const HomePage: React.FC = () => {
     const [copied, setCopied] = useState(false);
     const [error, setError] = useState('');
     const [selectedColor, setSelectedColor] = useState<'WHITE' | 'BLACK' | null>(null);
+    const [loading, setLoading] = useState(false);
 
     const navigate: NavigateFunction = useNavigate();
     const setRole = useDisplayStore(s => s.setRole);
@@ -34,11 +35,13 @@ const HomePage: React.FC = () => {
                 setError('Please choose a color before creating a game.');
                 return;
             }
+            setLoading(true);
             const gameId: string = await createGame();
             setCreatedGameId(gameId);
             await doJoin(gameId, selectedColor);
         } catch (err) {
             setError('Failed to create game. Is the server running?');
+            setLoading(false);
         }
     };
 
@@ -61,9 +64,11 @@ const HomePage: React.FC = () => {
                 setError('Please enter a game link or ID.');
                 return;
             }
+            setLoading(true);
             await doJoin(extractGameId(input));
         } catch (err) {
             setError('Failed to join game. Check the link or ID and try again.');
+            setLoading(false);
         }
     };
 
@@ -105,8 +110,8 @@ const HomePage: React.FC = () => {
                         </button>
                     </div>
                 )}
-                <button className={styles.primaryButton} onClick={handleCreateGameClick}>
-                    Create Game
+                <button className={styles.primaryButton} onClick={handleCreateGameClick} disabled={loading}>
+                    {loading ? 'Creating…' : 'Create Game'}
                 </button>
             </div>
 
@@ -121,8 +126,8 @@ const HomePage: React.FC = () => {
                     onKeyDown={(e) => e.key === 'Enter' && handleJoinGameClick()}
                     placeholder="Paste invite link or game ID"
                 />
-                <button className={styles.secondaryButton} onClick={handleJoinGameClick}>
-                    Join Game
+                <button className={styles.secondaryButton} onClick={handleJoinGameClick} disabled={loading}>
+                    {loading ? 'Joining…' : 'Join Game'}
                 </button>
             </div>
 
