@@ -9,8 +9,6 @@ export const BASE_URL =
 async function createGame(): Promise<string> {
     try {
         const res = await axios.post(`${BASE_URL}/api/create-game`);
-        console.log('Create Game got '+res.data);
-        setRoleId(res.data.roleId);
         return res.data;
     } catch (err) {
         console.error(`Unable to createGame: ${err}`);
@@ -18,15 +16,15 @@ async function createGame(): Promise<string> {
     }
 }
 
-async function joinGame(gameId: string): Promise<RoleAssignmentDTO> {
+async function joinGame(gameId: string, color?: string): Promise<RoleAssignmentDTO> {
     try {
-        const res = await axios.post(`${BASE_URL}/api/join-game/${gameId}`);
-        console.log('Setting game id to '+gameId)
+        const params = color ? `?color=${color}` : '';
+        const res = await axios.post(`${BASE_URL}/api/join-game/${gameId}${params}`);
         useGameStateStore.getState().setGameId(gameId);
-        setRoleId(res.data.roleId);
+        setRoleId(gameId, res.data.roleId);
         return res.data;
     } catch (err) {
-        console.error(`Unable to createGame: ${err}`);
+        console.error(`Unable to join game: ${err}`);
         throw err;
     }
 }
@@ -34,11 +32,9 @@ async function joinGame(gameId: string): Promise<RoleAssignmentDTO> {
 async function getGameRole(gameId: string, roleId: string): Promise<RoleAssignmentDTO> {
     try {
         const res = await axios.get(`${BASE_URL}/api/game/${gameId}/${roleId}`);
-        console.log('role is ' +res.data.roleId);
-        setRoleId(res.data.roleId);
-        return res.data.role;
+        return res.data;
     } catch (err) {
-        console.error(`Unable to createGame: ${err}`);
+        console.error(`Unable to get game role: ${err}`);
         throw err;
     }
 }

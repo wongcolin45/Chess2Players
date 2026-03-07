@@ -13,6 +13,39 @@
 .coloredSquare {
     background-color: darksalmon;
 }
+
 .blankSquare {
     background-color: antiquewhite;
+}
+
+.rankLabel {
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    font-size: 0.6rem;
+    font-weight: bold;
+    line-height: 1;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.fileLabel {
+    position: absolute;
+    bottom: 2px;
+    right: 3px;
+    font-size: 0.6rem;
+    font-weight: bold;
+    line-height: 1;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.blankSquare .rankLabel,
+.blankSquare .fileLabel {
+    color: darksalmon;
+}
+
+.coloredSquare .rankLabel,
+.coloredSquare .fileLabel {
+    color: antiquewhite;
 }

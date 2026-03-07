@@ -31,8 +31,8 @@ public class GameStateDTOConverter {
     }
 
     private static CapturedPiecesDTO getCapturedPiecesDTO(ViewableGame game) {
-        List<PieceType> whiteCaptures = new ArrayList<>();
-        List<PieceType> blackCaptures = new ArrayList<>();
+        List<PieceType> whiteCaptures = game.getLog().getWhiteCaptures();
+        List<PieceType> blackCaptures = game.getLog().getBlackCaptures();
         return new CapturedPiecesDTO(
                 getPieceSymbols(whiteCaptures, Color.WHITE),
                 getPieceSymbols(blackCaptures, Color.BLACK));
@@ -60,14 +60,19 @@ public class GameStateDTOConverter {
             switch (pieceType) {
                 case PieceType.PAWN:
                     pieces.add("P");
+                    break;
                 case PieceType.KNIGHT:
                     pieces.add("N");
+                    break;
                 case PieceType.BISHOP:
                     pieces.add("B");
+                    break;
                 case PieceType.ROOK:
                     pieces.add("R");
+                    break;
                 case PieceType.QUEEN:
                     pieces.add("Q");
+                    break;
                 default:
                     throw new IllegalArgumentException("Invalid piece type");
             }

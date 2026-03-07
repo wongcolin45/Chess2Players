@@ -40,6 +40,10 @@ public class Move {
     return pieceCaptured != null;
   }
 
+  public Piece getPieceCaptured() {
+    return pieceCaptured;
+  }
+
   @Override
   public String toString() {
     return piece + ": " + start + " to " + end;

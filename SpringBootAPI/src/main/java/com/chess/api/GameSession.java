@@ -37,15 +37,24 @@ public class GameSession {
   }
 
   public RoleAssignmentDTO getRole(String roleId) {
-    if (whitePlayer.equals(roleId)) {
+    if (roleId.equals(whitePlayer)) {
       return new RoleAssignmentDTO(whitePlayer, PlayerRole.WHITE);
-    } else if (blackPlayer.equals(roleId)) {
+    } else if (roleId.equals(blackPlayer)) {
       return new RoleAssignmentDTO(blackPlayer, PlayerRole.BLACK);
     }
     return new RoleAssignmentDTO(SPECTATOR_ID, PlayerRole.SPECTATOR);
   }
 
-  public RoleAssignmentDTO assignRole() {
+  public RoleAssignmentDTO assignRole(String preferredColor) {
+    if ("WHITE".equals(preferredColor) && whitePlayer == null) {
+      whitePlayer = String.valueOf(UUID.randomUUID().hashCode());
+      return new RoleAssignmentDTO(whitePlayer, PlayerRole.WHITE);
+    }
+    if ("BLACK".equals(preferredColor) && blackPlayer == null) {
+      blackPlayer = String.valueOf(UUID.randomUUID().hashCode());
+      return new RoleAssignmentDTO(blackPlayer, PlayerRole.BLACK);
+    }
+    // Preferred color taken or no preference — assign whatever is available
     if (whitePlayer == null) {
       whitePlayer = String.valueOf(UUID.randomUUID().hashCode());
       return new RoleAssignmentDTO(whitePlayer, PlayerRole.WHITE);
@@ -57,24 +66,26 @@ public class GameSession {
     return new RoleAssignmentDTO(SPECTATOR_ID, PlayerRole.SPECTATOR);
   }
 
+  public RoleAssignmentDTO assignRole() {
+    return assignRole(null);
+  }
+
   public void movePiece(MoveDTO moveDTO, String roleId) {
-//    if (whitePlayer == null || blackPlayer == null) {
-//      throw new IllegalStateException("One player not assigned");
-//    }
-//    if (!roleId.equals(whitePlayer) && !roleId.equals(blackPlayer)) {
-//      throw new IllegalArgumentException("Invalid role");
-//    }
+    if (!roleId.equals(whitePlayer) && !roleId.equals(blackPlayer)) {
+      throw new IllegalArgumentException("Only assigned players can move pieces");
+    }
     Position from = getPosition(moveDTO.getFrom());
     ViewableBoard board = game.getViewableBoard();
+    if (board.isEmpty(from)) {
+      throw new IllegalArgumentException("No piece at that position");
+    }
     Piece piece = board.getPiece(from);
-
-//    if (roleId.equals(whitePlayer) && piece.getColor() == Color.BLACK) {
-//      throw new IllegalArgumentException("White piece cannot move black pieces");
-//    }
-//    if (roleId.equals(blackPlayer) && piece.getColor() == Color.WHITE) {
-//      throw new IllegalArgumentException("Black piece cannot move white pieces");
-//    }
-
+    if (roleId.equals(whitePlayer) && piece.getColor() == Color.BLACK) {
+      throw new IllegalArgumentException("White cannot move black pieces");
+    }
+    if (roleId.equals(blackPlayer) && piece.getColor() == Color.WHITE) {
+      throw new IllegalArgumentException("Black cannot move white pieces");
+    }
     Position to = getPosition(moveDTO.getTo());
     game.movePiece(from, to);
   }
@@ -125,7 +136,7 @@ public class GameSession {
     }
     // Check black side castles
     if (!log.squareMoved(new Position("e8"))) {
-      if (!log.squareMoved(new Position("g8"))) {
+      if (!log.squareMoved(new Position("h8"))) {
         marks.append("k");
       }
       if (!log.squareMoved(new Position("a8"))) {
@@ -179,16 +190,18 @@ public class GameSession {
   }
 
   public PossibleMovesDTO getPossibleMoves(PositionDTO positionDTO, String roleId) {
-
     Position pos = getPosition(positionDTO);
     ViewableBoard board = game.getViewableBoard();
-    Piece piece = board.getPiece(pos);
-    if (roleId.equals(SPECTATOR_ID) ||
-        (roleId.equals(whitePlayer) &&  piece.getColor() == Color.BLACK) ||
-        (roleId.equals(blackPlayer) &&  piece.getColor() == Color.WHITE)) {
-      throw new IllegalArgumentException("Invalid role "+roleId + "whie is "+whitePlayer + "black is "+blackPlayer);
+    if (board.isEmpty(pos)) {
+      return new PossibleMovesDTO(List.of());
     }
-
+    Piece piece = board.getPiece(pos);
+    boolean isSpectator = roleId.equals(SPECTATOR_ID);
+    boolean wrongColor = (roleId.equals(whitePlayer) && piece.getColor() == Color.BLACK)
+                      || (roleId.equals(blackPlayer) && piece.getColor() == Color.WHITE);
+    if (isSpectator || wrongColor) {
+      return new PossibleMovesDTO(List.of());
+    }
     List<Position> possibleMoves = game.getPossibleMoves(pos);
     return new PossibleMovesDTO(possibleMoves);
   }

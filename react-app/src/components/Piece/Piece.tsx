@@ -21,31 +21,31 @@ interface PieceProps {
     value: string;
     id: string;
     selected: boolean;
+    isDraggable: boolean;
 }
 
-const Piece = ({value, id, selected}: PieceProps) => {
+const Piece = ({value, id, selected, isDraggable}: PieceProps) => {
 
-    const { attributes, listeners, setNodeRef, transform } = useDraggable({id: id});
+    const { attributes, listeners, setNodeRef, transform } = useDraggable({id: id, disabled: !isDraggable});
 
     const style: React.CSSProperties = useMemo(() => {
         const defaultStyle: React.CSSProperties = {
             transform: transform
                 ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
                 : undefined,
-            touchAction: 'none', // for mobile compatibility
+            touchAction: 'none',
             position: 'relative',
             backgroundColor: 'transparent',
-            zIndex: 100
+            zIndex: 100,
+            cursor: isDraggable ? 'grab' : 'default',
         };
         if (!selected) {
             return defaultStyle;
         }
         return {...defaultStyle, zIndex: 200};
-    },[transform, selected])
+    },[transform, selected, isDraggable])
 
     const link: string = (`https://assets-themes.chess.com/image/ejgfv/150/${tags.get(value)}.png`)
-
-
 
     return (
         <img

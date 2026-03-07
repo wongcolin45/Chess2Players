@@ -37,7 +37,7 @@ export function connectWebSocket(): void {
                 useGameStateStore.getState().updateState(data);
             });
             // subscribe to getting possible moves
-            client?.subscribe(`/topic/possible-moves/${gameId}/${getRoleId()}`, (msg): void => {
+            client?.subscribe(`/topic/possible-moves/${gameId}/${getRoleId(gameId)}`, (msg): void => {
                 const data = JSON.parse(msg.body);
                 useGameStateStore.getState().updatePossibleMoves(data.possibleMoves);
             })
@@ -63,7 +63,7 @@ export function sendMove(fromDTO: PositionDTO, toDTO: PositionDTO): void {
     const gameId: string = useGameStateStore.getState().gameId;
 
     client.publish({
-        destination: `/app/move-piece/${gameId}/${getRoleId()}`,
+        destination: `/app/move-piece/${gameId}/${getRoleId(gameId)}`,
         body: JSON.stringify(moveDTO),
     });
 }
@@ -76,7 +76,7 @@ export function getPossibleMoves(id: string): void {
     const PositionDTO: PositionDTO = getPositionDTO(id);
     const gameId: string = useGameStateStore.getState().gameId;
     client.publish({
-        destination: `/app/possible-moves/${gameId}/${getRoleId()}`,
+        destination: `/app/possible-moves/${gameId}/${getRoleId(gameId)}`,
         body: JSON.stringify(PositionDTO),
     })
 }

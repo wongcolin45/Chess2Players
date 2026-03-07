@@ -24,18 +24,17 @@ public class King extends AbstractPiece {
     ViewableGameLog log = game.getLog();
     if (!log.squareMoved(pos)) {
       int row = (color == Color.WHITE) ? 7 : 0;
-      Position rook1 = new Position(row, 0);
       String r = (color == Color.BLACK) ? "8" : "1";
-
-      if (!log.squareMoved(rook1) && !board.isEmpty(rook1)) {
+      Position kingsideRook = new Position(row, 7);
+      if (!log.squareMoved(kingsideRook) && !board.isEmpty(kingsideRook)) {
         Position a = new Position("f"+r);
         Position b = new Position("g"+r);
         if (board.isEmpty(a) && board.isEmpty(b)) {
           moves.add(new Position("g"+r));
         }
       }
-      Position rook2 = new Position(row, 7);
-      if (!log.squareMoved(rook2) && !board.isEmpty(rook2)) {
+      Position queensideRook = new Position(row, 0);
+      if (!log.squareMoved(queensideRook) && !board.isEmpty(queensideRook)) {
         Position a = new Position("d"+r);
         Position b = new Position("c"+r);
         Position c = new Position("b"+r);

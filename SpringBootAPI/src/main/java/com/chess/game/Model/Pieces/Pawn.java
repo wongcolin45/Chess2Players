@@ -17,8 +17,6 @@ public class Pawn extends AbstractPiece {
 
   private final int forward;
 
-  private final String symbol;
-
   /**
    * Initializes the color and which direction is forward for the pawn.
    * @param color the color of the pawn
@@ -27,12 +25,9 @@ public class Pawn extends AbstractPiece {
     super(color, symbol);
     if (color == Color.WHITE) {
       this.forward = -1;
-      this.symbol = "♟";
     } else {
       this.forward = 1;
-      this.symbol = "♙";
     }
-
   }
 
   protected void checkOpenMove(ViewableBoard board, List<Position> moves, int r, int c) {
@@ -75,12 +70,14 @@ public class Pawn extends AbstractPiece {
 
     ViewableBoard board = game.getViewableBoard();
 
-    // Check first move
-    if ((color == Color.WHITE && r == 6) || (color == Color.BLACK && r == 1)) {
-      checkOpenMove(board, moves, r + 2 * forward, c);
-    }
     // Check moving forward
     checkOpenMove(board, moves, r + forward, c);
+    // Check first move (only if single-step forward is also open)
+    if ((color == Color.WHITE && r == 6) || (color == Color.BLACK && r == 1)) {
+      if (board.isEmpty(new Position(r + forward, c))) {
+        checkOpenMove(board, moves, r + 2 * forward, c);
+      }
+    }
     // Check diagonal captures
     for (int i = -1; i <= 1; i+= 2) {
       checkCapture(board, moves, r + forward, c + i);

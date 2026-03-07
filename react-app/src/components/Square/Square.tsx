@@ -6,17 +6,19 @@ import type {PositionDTO} from "../../dto.ts";
 import PromotionSelection from "../PromotionSelection/PromotionSelection.tsx";
 import type {State} from "../../store/ChessGameStore.ts";
 import styles from './Square.module.css';
-import {isSamePosition} from "../../utils.ts";
+import {isSamePosition, isOwnPiece} from "../../utils.ts";
 import {useDisplayStore} from "../../store/DisplayStore.ts";
 
 interface SquareProps {
     row: number;
     col: number;
     value: string;
+    rankLabel?: string;
+    fileLabel?: string;
 }
 
 
-const Square = ({row, col, value}: SquareProps): JSX.Element => {
+const Square = ({row, col, value, rankLabel, fileLabel}: SquareProps): JSX.Element => {
 
     const [style, setStyle] = useState<CSSProperties | undefined>(undefined);
 
@@ -98,33 +100,39 @@ const Square = ({row, col, value}: SquareProps): JSX.Element => {
         } else if (isLastMoveTo) {
             style.backgroundColor = '#E6D98A';
         }
+        if (isSelectedPiece) {
+            style.zIndex = 1000;
+        }
         return style;
     },[selectedPiece, lastMove, kingPosition, inCheck, row, col])
 
     const renderContents = () => {
         const state: State = useGameStateStore.getState().state;
         const {pawnToPromote} = state;
-        const isTurn: boolean = useDisplayStore.getState().role === state.turn;
+        const role: string = useDisplayStore.getState().role;
+        const isTurn: boolean = role === state.turn;
+        const draggable: boolean = isOwnPiece(value, role);
         if (pawnToPromote.row === row && pawnToPromote.col === col && isTurn) {
             return (
                 <>
                     <PromotionSelection/>
-                    {(value !== ' ') && <Piece value={value} id={`${row},${col}`} selected={true} />}
+                    {(value !== ' ') && <Piece value={value} id={`${row},${col}`} selected={true} isDraggable={draggable} />}
                 </>
-
             )
         }
         return (
             <>
                 {style && <div style={style}></div>}
-                {(value !== ' ') && <Piece value={value} id={`${row},${col}`} selected={true} />}
+                {(value !== ' ') && <Piece value={value} id={`${row},${col}`} selected={true} isDraggable={draggable} />}
             </>
         )
     }
 
 
     return (
-        <div ref={setNodeRef} className={className}  style={getSquareStyle}>
+        <div ref={setNodeRef} className={className} style={getSquareStyle}>
+            {rankLabel && <span className={styles.rankLabel}>{rankLabel}</span>}
+            {fileLabel && <span className={styles.fileLabel}>{fileLabel}</span>}
             {renderContents()}
         </div>
     )

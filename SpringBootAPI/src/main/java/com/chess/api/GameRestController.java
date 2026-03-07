@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -32,9 +33,10 @@ public class GameRestController {
   }
 
   @PostMapping("/join-game/{gameId}")
-  public RoleAssignmentDTO joinGame(@PathVariable String gameId) {
+  public RoleAssignmentDTO joinGame(@PathVariable String gameId,
+                                    @RequestParam(required = false) String color) {
     GameSession session = manager.getGameSession(gameId);
-    return session.assignRole();
+    return session.assignRole(color);
   }
 
   @GetMapping("game/{gameId}/{roleId}")

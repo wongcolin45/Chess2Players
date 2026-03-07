@@ -82,11 +82,11 @@ public class GameLog implements MutableGameLog {
       halfMoveClock++;
     }
     if (move.isCapture()) {
-      Piece piece = move.getPiece();
+      PieceType capturedType = move.getPieceCaptured().getType();
       if (color == Color.WHITE) {
-        whiteCapturedPieces.add(piece.getType());
+        whiteCapturedPieces.add(capturedType);
       } else {
-        blackCapturedPieces.add(piece.getType());
+        blackCapturedPieces.add(capturedType);
       }
     }
   }

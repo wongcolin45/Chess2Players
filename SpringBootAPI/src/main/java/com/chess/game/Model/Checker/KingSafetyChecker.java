@@ -122,7 +122,7 @@ public class KingSafetyChecker implements ViewableKingSafetyChecker {
     if (getKingPosition(board.getPiece(start).getColor()) == null) {
       return ends;
     }
-    if (!kingInCheck(board.getPiece(start).getColor()) && isPiecePinned(start)) {
+    if (!kingInCheck(board.getPiece(start).getColor()) && !isPiecePinned(start)) {
       return ends;
     }
     return getLegalMoves(start, ends);

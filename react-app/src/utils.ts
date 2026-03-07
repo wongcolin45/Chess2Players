@@ -14,7 +14,15 @@ function isSamePosition(x: PositionDTO, y: PositionDTO) {
 }
 
 
+// White pieces are uppercase (P N B R Q K), black pieces are lowercase (p n b r q k)
+function isOwnPiece(value: string, role: string): boolean {
+    if (value === ' ') return false;
+    const isWhitePiece = value === value.toUpperCase();
+    return (role === 'WHITE' && isWhitePiece) || (role === 'BLACK' && !isWhitePiece);
+}
+
 export {
     getPositionDTO,
-    isSamePosition
+    isSamePosition,
+    isOwnPiece,
 }
