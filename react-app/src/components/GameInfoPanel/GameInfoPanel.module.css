@@ -27,7 +27,7 @@
 
 .gameIdRow {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 8px;
     background: transparent;
 }
@@ -35,24 +35,43 @@
 .gameIdText {
     font-family: monospace;
     font-size: 0.75rem;
-    word-break: break-all;
-    flex: 1;
     color: #333;
     background: transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .copyButton {
-    padding: 2px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 7px 12px;
+    width: 100%;
+    box-sizing: border-box;
     font-size: 0.75rem;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    font-weight: 600;
+    background-color: darksalmon;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
     cursor: pointer;
     white-space: nowrap;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+    letter-spacing: 0.02em;
 }
 
 .copyButton:hover {
-    background-color: #e0e0e0;
+    background-color: #d4735a;
+}
+
+.copyButton:active {
+    transform: scale(0.96);
+}
+
+.copyButton.copied {
+    background-color: #4caf50;
 }
 
 .roleDisplay {
@@ -103,23 +122,23 @@
 }
 
 .gameOverCard {
-    border-color: #c00;
-    background-color: #fff5f5;
+    border-color: #d4735a;
+    background-color: #fff8f6;
 }
 
 .gameOverLabel {
     font-size: 0.7rem;
-    color: #c00;
+    color: #b05a3a;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: bold;
+    letter-spacing: 0.06em;
+    font-weight: 700;
     background: transparent;
 }
 
 .gameOverResult {
     font-size: 0.95rem;
     font-weight: 600;
-    color: #333;
+    color: #1a1a1a;
     margin-top: 4px;
     background: transparent;
 }

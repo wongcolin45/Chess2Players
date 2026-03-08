@@ -84,7 +84,7 @@ public class GameSession {
       throw new IllegalArgumentException("White cannot move black pieces");
     }
     if (roleId.equals(blackPlayer) && piece.getColor() == Color.WHITE) {
-      throw new IllegalArgumentException("Black cannot move white pieces");
+       throw new IllegalArgumentException("Black cannot move white pieces");
     }
     Position to = getPosition(moveDTO.getTo());
     game.movePiece(from, to);

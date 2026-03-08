@@ -99,11 +99,21 @@ public class KingSafetyChecker implements ViewableKingSafetyChecker {
   private List<Position> getLegalMoves(Position start, List<Position> ends) {
     Color turn = board.getPiece(start).getColor();
     List<Position> moves = new ArrayList<>();
-    boolean wasInCheck = kingInCheck(turn);
     for (Position end : ends) {
       SandboxGame gameCopy = game.getCopy();
       gameCopy.forceMove(start, end);
       if (!gameCopy.kingInCheck(turn)) {
+        // For castle moves, also ensure the king does not pass through check
+        if (board.getPiece(start).getType() == PieceType.KING
+            && Math.abs(start.getCol() - end.getCol()) >= 2) {
+          int dir = (end.getCol() > start.getCol()) ? 1 : -1;
+          Position intermediate = new Position(start.getRow(), start.getCol() + dir);
+          SandboxGame intermediaryCopy = game.getCopy();
+          intermediaryCopy.forceMove(start, intermediate);
+          if (intermediaryCopy.kingInCheck(turn)) {
+            continue;
+          }
+        }
         moves.add(end);
       }
     }
@@ -118,7 +128,8 @@ public class KingSafetyChecker implements ViewableKingSafetyChecker {
     if (getKingPosition(board.getPiece(start).getColor()) == null) {
       return ends;
     }
-    if (!kingInCheck(board.getPiece(start).getColor()) && !isPiecePinned(start)) {
+    boolean isKing = board.getPiece(start).getType() == PieceType.KING;
+    if (!isKing && !kingInCheck(board.getPiece(start).getColor()) && !isPiecePinned(start)) {
       return ends;
     }
     return getLegalMoves(start, ends);

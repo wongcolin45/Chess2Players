@@ -6,22 +6,21 @@ import {useGameStateStore} from "../../store/ChessGameStore.ts";
 import {useDisplayStore} from "../../store/DisplayStore.ts";
 import GameInfoPanel from "../GameInfoPanel/GameInfoPanel.tsx";
 import styles from './GamePage.module.css'
-import {useParams} from "react-router-dom";
+import {useParams, useNavigate} from "react-router-dom";
 import {joinGame, getGameRole} from "../../API/restClient.ts";
 import {getRoleId, clearRoleId} from "../../store/playerIdStore.ts";
 import type {RoleAssignmentDTO} from "../../dto.ts";
 
-
 const GamePage = (): JSX.Element => {
 
     const {gameId: urlGameId} = useParams<{gameId: string}>();
+    const navigate = useNavigate();
     const gameId: string = useGameStateStore(s => s.gameId);
     const setGameId = useGameStateStore(s => s.setGameId);
     const gameLoaded = useGameStateStore(s => s.gameLoaded);
     const setRole = useDisplayStore(s => s.setRole);
     const flipped = useDisplayStore(s => s.flipped);
     const flipBoard = useDisplayStore(s => s.flipBoard);
-
     const [joined, setJoined] = useState<boolean>(!!getRoleId(urlGameId ?? ''));
     const [roleLoading, setRoleLoading] = useState<boolean>(!!getRoleId(urlGameId ?? ''));
     const [joining, setJoining] = useState(false);

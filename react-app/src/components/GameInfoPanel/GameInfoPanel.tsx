@@ -47,8 +47,11 @@ const GameInfoPanel: React.FC = () => {
                 <div className={styles.label}>Invite a friend</div>
                 <div className={styles.gameIdRow}>
                     <span className={styles.gameIdText}>{`${window.location.origin}/game/${gameId}`}</span>
-                    <button className={styles.copyButton} onClick={handleCopyGameId}>
-                        {copied ? '✓' : 'Copy link'}
+                    <button
+                        className={`${styles.copyButton} ${copied ? styles.copied : ''}`}
+                        onClick={handleCopyGameId}
+                    >
+                        {copied ? '✓ Copied!' : '⎘ Copy link'}
                     </button>
                 </div>
             </div>
